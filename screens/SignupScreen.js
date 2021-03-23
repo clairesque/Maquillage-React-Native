@@ -6,6 +6,8 @@ import SocialButton from '../components/SocialButton';
 import {AuthContext} from '../navigation/AuthProvider';
 
 const SignupScreen = ({navigation}) => {
+  const [fname, setFirstName] = useState();
+  const [lname, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
@@ -17,10 +19,26 @@ const SignupScreen = ({navigation}) => {
       <Text style={styles.text}>Create an account</Text>
 
       <FormInput
+        labelValue={fname}
+        onChangeText={(fname) => setFirstName(fname)}
+        placeholderText="First Name"
+        iconType="user"
+        autoCorrect={false}
+      />
+
+      <FormInput
+        labelValue={lname}
+        onChangeText={(lname) => setLastName(lname)}
+        placeholderText="Last Name"
+        iconType="user"
+        autoCorrect={false}
+      />
+
+      <FormInput
         labelValue={email}
         onChangeText={(userEmail) => setEmail(userEmail)}
         placeholderText="Email"
-        iconType="user"
+        iconType="mail"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -44,23 +62,8 @@ const SignupScreen = ({navigation}) => {
 
       <FormButton
         buttonTitle="Sign Up"
-        onPress={() => register(email, password)}
+        onPress={() => register(fname, lname, email, password)}
       />
-
-      <View style={styles.textPrivate}>
-        <Text style={styles.color_textPrivate}>
-          By registering, you confirm that you accept our{' '}
-        </Text>
-        <TouchableOpacity onPress={() => alert('Terms Clicked!')}>
-          <Text style={[styles.color_textPrivate, {color: '#e88832'}]}>
-            Terms of service
-          </Text>
-        </TouchableOpacity>
-        <Text style={styles.color_textPrivate}> and </Text>
-        <Text style={[styles.color_textPrivate, {color: '#e88832'}]}>
-          Privacy Policy
-        </Text>
-      </View>
 
       {Platform.OS === 'android' ? (
         <View>
@@ -71,7 +74,7 @@ const SignupScreen = ({navigation}) => {
             backgroundColor="#e6eaf4"
             onPress={() => {}}
           />
-    
+
           <SocialButton
             buttonTitle="Sign Up with Google"
             btnType="google"
