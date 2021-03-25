@@ -100,7 +100,7 @@ const HomeScreen = ({navigation}) => {
   const Card = ({product}) => {
     return (
       <TouchableHighlight underlayColor={colours.white} activeOpacity={0.9}
-        onPress={() => navigation.navigate('DetailsScreen', product)}>
+        onPress={() => navigation.navigate('ProductScreen', product)}>
         <View style={styles.card}>
           <View style={{alignItems: 'center', top: -40}}>
             <Image
