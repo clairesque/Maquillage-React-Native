@@ -16,6 +16,16 @@ const ProductScreen = ({navigation, route}) => {
     return filteredDescription;
   }
 
+  function toggleText(item) {
+    if(item.length===0){
+      tagText = null;
+    }
+    else {
+      tagText = <Text style={style.tags}>{'#tags:'}</Text>
+    }
+    return tagText;
+  }
+
   return (
     <SafeAreaView style={{backgroundColor: colours.white}}>
         <View
@@ -61,7 +71,7 @@ const ProductScreen = ({navigation, route}) => {
           <Text style={style.detailsText}>
             {splitDescription(item.description)}
           </Text>
-          <Text style={style.tags}>{'#tags:'}</Text>
+          {toggleText(item.tag_list)}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {item.tag_list.map((filter, index) => (
               <View
