@@ -1,68 +1,138 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, StyleSheet, View, FlatList} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+} from 'react-native';
 import {SearchBar} from 'react-native-elements';
+import {
+  ScrollView,
+  TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import colours from '../constants/colours';
+import filters from '../constants/filters';
+import products from '../constants/products';
 
-const App = () => {
+const {width} = Dimensions.get('screen');
+const cardWidth = width / 2 - 20;
+
+const HomeScreen = ({navigation}) => {
   const [search, setSearch] = useState('');
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
+  // const [filteredDataSource, setFilteredDataSource] = useState([]);
+  // const [masterDataSource, setMasterDataSource] = useState([]);
+  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
 
-  useEffect(() => {
-    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       setFilteredDataSource(responseJson);
+  //       setMasterDataSource(responseJson);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
 
-  const searchFilterFunction = (text) => {
-    if (text) {
-      const newData = masterDataSource.filter(function (item) {
-        const searchName = item.name
-          ? item.name.toLowerCase()
-          : ''.toLowerCase();
-        const searchBrand = item.brand
-          ? item.brand.toLowerCase()
-          : ''.toLowerCase();
-        const textData = text.toLowerCase();
-        return (searchName + searchBrand).indexOf(textData) > -1;
-      });
-      setFilteredDataSource(newData);
-      setSearch(text);
-    } else {
-      setFilteredDataSource(masterDataSource);
-      setSearch(text);
-    }
-  };
-
-  const ItemView = ({item}) => {
+  // const searchFilterFunction = (text) => {
+  //   if (text) {
+  //     const newData = masterDataSource.filter(function (item) {
+  //       const searchName = item.name
+  //         ? item.name.toLowerCase()
+  //         : ''.toLowerCase();
+  //       const searchBrand = item.brand
+  //         ? item.brand.toLowerCase()
+  //         : ''.toLowerCase();
+  //       const textData = text.toLowerCase();
+  //       return (searchName + searchBrand).indexOf(textData) > -1;
+  //     });
+  //     setFilteredDataSource(newData);
+  //     setSearch(text);
+  //   } else {
+  //     setFilteredDataSource(masterDataSource);
+  //     setSearch(text);
+  //   }
+  // };
+  const ListFilters = () => {
     return (
-      <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-        {item.brand}
-        {' - '}
-        {item.name}
-      </Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filterListContainer}>
+        {filters.map((filter, index) => (
+          <TouchableOpacity
+            key={index}
+            activeOpacity={0.8}
+            onPress={() => setSelectedFilterIndex(index)}>
+            <View
+              style={{
+                backgroundColor:
+                  selectedFilterIndex == index
+                    ? colours.primary
+                    : colours.secondary,
+                ...styles.filterBtn,
+              }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  marginLeft: 10,
+                  color:
+                    selectedFilterIndex == index
+                      ? colours.white
+                      : colours.primary,
+                }}>
+                {filter.name}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     );
   };
-
-  const ItemSeparatorView = () => {
+  const Card = ({product}) => {
     return (
-      <View
-        style={{
-          height: 0.5,
-          width: '100%',
-          backgroundColor: '#C8C8C8',
-        }}
-      />
+      <TouchableHighlight underlayColor={colours.white} activeOpacity={0.9}
+        onPress={() => navigation.navigate('DetailsScreen', product)}>
+        <View style={styles.card}>
+          <View style={{alignItems: 'center', top: -40}}>
+            <Image
+              source={{uri: product.image_link}}
+              style={{height: 120, width: 120}}
+            />
+          </View>
+          <View style={{marginHorizontal: 20}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              {product.name}
+            </Text>
+            <Text style={{fontSize: 14, color: colours.grey, marginTop: 2}}>
+              {product.brand}
+            </Text>
+          </View>
+          <View
+            style={{
+              marginTop: 10,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              ${product.price}
+            </Text>
+            <View style={styles.addToCartBtn}>
+              <Icon name="add" size={20} color={colours.white} />
+            </View>
+          </View>
+        </View>
+      </TouchableHighlight>
     );
-  };
-
-  const getItem = (item) => {
-    alert('Id : ' + item.id + ' Title : ' + item.brandd);
   };
 
   return (
@@ -76,11 +146,17 @@ const App = () => {
           placeholder="Type Here..."
           value={search}
         />
+        <View>
+          <ListFilters />
+        </View>
         <FlatList
-          data={filteredDataSource}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={ItemSeparatorView}
-          renderItem={ItemView}
+          data={products.slice(0, 10)}
+          numColumns={2}
+          initialNumToRender={6}
+          //keyExtractor={(item, index) => index.toString()}
+          //ItemSeparatorComponent={ItemSeparatorView}
+          //renderItem={ItemView}
+          renderItem={({item}) => <Card product={item} />}
         />
       </View>
     </SafeAreaView>
@@ -94,8 +170,38 @@ const styles = StyleSheet.create({
   itemStyle: {
     padding: 10,
   },
+  filterListContainer: {
+    paddingVertical: 30,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  filterBtn: {
+    height: 40,
+    width: 125,
+    marginRight: 9,
+    borderRadius: 30,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  card: {
+    height: 220,
+    width: cardWidth,
+    marginHorizontal: 10,
+    marginBottom: 20,
+    marginTop: 50,
+    borderRadius: 15,
+    elevation: 13,
+    backgroundColor: colours.white,
+  },
+  addToCartBtn: {
+    height: 30,
+    width: 30,
+    borderRadius: 20,
+    backgroundColor: colours.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
-export default App;
-
-
+export default HomeScreen;
