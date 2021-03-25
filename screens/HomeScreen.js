@@ -8,14 +8,14 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import {SearchBar} from 'react-native-elements';
+import {colors, SearchBar} from 'react-native-elements';
 import {
   ScrollView,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
 import filters from '../constants/filters';
 import products from '../constants/products';
@@ -74,9 +74,7 @@ const HomeScreen = ({navigation}) => {
             <View
               style={{
                 backgroundColor:
-                  selectedFilterIndex == index
-                    ? colours.primary
-                    : colours.secondary,
+                  selectedFilterIndex == index ? colours.primary : colours.grey,
                 ...styles.filterBtn,
               }}>
               <Text
@@ -85,9 +83,7 @@ const HomeScreen = ({navigation}) => {
                   fontWeight: 'bold',
                   marginLeft: 10,
                   color:
-                    selectedFilterIndex == index
-                      ? colours.white
-                      : colours.primary,
+                    selectedFilterIndex == index ? colours.white : colours.dark,
                 }}>
                 {filter.name}
               </Text>
@@ -99,7 +95,9 @@ const HomeScreen = ({navigation}) => {
   };
   const Card = ({product}) => {
     return (
-      <TouchableHighlight underlayColor={colours.white} activeOpacity={0.9}
+      <TouchableHighlight
+        underlayColor={colours.white}
+        activeOpacity={0.9}
         onPress={() => navigation.navigate('ProductScreen', product)}>
         <View style={styles.card}>
           <View style={{alignItems: 'center', top: -40}}>
@@ -112,7 +110,7 @@ const HomeScreen = ({navigation}) => {
             <Text style={{fontSize: 18, fontWeight: 'bold'}}>
               {product.name}
             </Text>
-            <Text style={{fontSize: 14, color: colours.grey, marginTop: 2}}>
+            <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
               {product.brand}
             </Text>
           </View>
@@ -127,7 +125,7 @@ const HomeScreen = ({navigation}) => {
               ${product.price}
             </Text>
             <View style={styles.addToCartBtn}>
-              <Icon name="add" size={20} color={colours.white} />
+              <Icon name="heart" size={15} color={colours.white} />
             </View>
           </View>
         </View>
@@ -140,10 +138,23 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.container}>
         <SearchBar
           round
+          inputStyle={{backgroundColor: colours.grey}}
+          containerStyle={{backgroundColor: colours.grey}}
+          inputContainerStyle={{backgroundColor: colours.grey}}
+          containerStyle={{
+            backgroundColor: 'white',
+            borderWidth: 1,
+            borderRadius: 5,
+            width: '85%',
+            marginLeft: '8%',
+            borderBottomColor: 'transparent',
+            borderTopColor: 'transparent',
+            borderWidth: 0,
+          }}
           searchIcon={{size: 24}}
           onChangeText={(text) => searchFilterFunction(text)}
           onClear={(text) => searchFilterFunction('')}
-          placeholder="Type Here..."
+          placeholder="Search for products..."
           value={search}
         />
         <View>
@@ -173,16 +184,17 @@ const styles = StyleSheet.create({
   filterListContainer: {
     paddingVertical: 30,
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   filterBtn: {
     height: 40,
-    width: 125,
-    marginRight: 9,
+    width: 110,
     borderRadius: 30,
+    marginStart: 15,
+    paddingRight: 5,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   card: {
     height: 220,
@@ -197,8 +209,8 @@ const styles = StyleSheet.create({
   addToCartBtn: {
     height: 30,
     width: 30,
-    borderRadius: 20,
-    backgroundColor: colours.primary,
+    borderRadius: 10,
+    backgroundColor: colours.secondary,
     justifyContent: 'center',
     alignItems: 'center',
   },

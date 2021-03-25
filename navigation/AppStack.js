@@ -25,7 +25,7 @@ const FeedStack = ({navigation}) => (
       options={{
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          color: '#2e64e5',
+          color: '#162F54',
           fontFamily: 'Kufam-SemiBoldItalic',
           fontSize: 18,
         },
@@ -39,7 +39,7 @@ const FeedStack = ({navigation}) => (
               name="plus"
               size={22}
               backgroundColor="#fff"
-              color="#2e64e5"
+              color="#162F54"
               onPress={() => navigation.navigate('AddPost')}
             />
           </View>
@@ -53,14 +53,14 @@ const FeedStack = ({navigation}) => (
         title: '',
         headerTitleAlign: 'center',
         headerStyle: {
-          backgroundColor: '#2e64e515',
-          shadowColor: '#2e64e515',
+          backgroundColor: '#162F5415',
+          shadowColor: '#162F5415',
           elevation: 0,
         },
         headerBackTitleVisible: false,
         headerBackImage: () => (
           <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#2e64e5" />
+            <Ionicons name="arrow-back" size={25} color="#162F54" />
           </View>
         ),
       }}
@@ -79,7 +79,7 @@ const FeedStack = ({navigation}) => (
         headerBackTitleVisible: false,
         headerBackImage: () => (
           <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#2e64e5" />
+            <Ionicons name="arrow-back" size={25} color="#162F54" />
           </View>
         ),
       }}
@@ -98,7 +98,7 @@ const FeedStack = ({navigation}) => (
         headerBackTitleVisible: false,
         headerBackImage: () => (
           <View style={{marginLeft: 15}}>
-            <Ionicons name="arrow-back" size={25} color="#2e64e5" />
+            <Ionicons name="arrow-back" size={25} color="#162F54" />
           </View>
         ),
       }}
@@ -161,7 +161,7 @@ const AppStack = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: '#2e64e5',
+        activeTintColor: '#162F54',
       }}>
       <Tab.Screen
         name="Home"
