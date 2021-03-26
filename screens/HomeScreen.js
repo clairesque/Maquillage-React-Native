@@ -45,6 +45,7 @@ const HomeScreen = ({navigation}) => {
         brand: item.brand,
         name: item.name,
         image_link: item.image_link,
+        status: "liked"
       })
       .then(() => {
         Alert.alert(
