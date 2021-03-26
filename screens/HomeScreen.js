@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Dimensions,
   Image,
@@ -6,8 +6,12 @@ import {
   Text,
   StyleSheet,
   View,
+  Alert,
   FlatList,
 } from 'react-native';
+import { AuthContext } from '../navigation/AuthProvider';
+import {firebase} from '../src/firebase/config';
+import firestore from '@react-native-firebase/firestore';
 import {colors, SearchBar} from 'react-native-elements';
 import {
   ScrollView,
@@ -24,11 +28,37 @@ const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
 const HomeScreen = ({navigation}) => {
+  const {user, logout} = useContext(AuthContext);
   const [search, setSearch] = useState('');
+  const [like, setLike] = useState(null);
   // const [filteredDataSource, setFilteredDataSource] = useState([]);
   // const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
+  
+  const likeProduct = async (item) => {
+    console.log('Like: ', like);
 
+    firestore()
+      .collection('likes')
+      .add({
+        userId: user.uid,
+        brand: item.brand,
+        name: item.name,
+        image_link: item.image_link,
+      })
+      .then(() => {
+        Alert.alert(
+          'You have liked this product.',
+        );
+        setLike(null);
+      })
+      .catch((error) => {
+        console.log(
+          'Something went wrong with this.',
+          error,
+        );
+      });
+  };
   // useEffect(() => {
   //   fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
   //     .then((response) => response.json())
@@ -95,10 +125,10 @@ const HomeScreen = ({navigation}) => {
   };
   const Card = ({product}) => {
     return (
-      <TouchableHighlight
-        underlayColor={colours.white}
-        activeOpacity={0.9}
-        onPress={() => navigation.navigate('ProductScreen', product)}>
+      // <TouchableHighlight
+      //   underlayColor={colours.white}
+      //   activeOpacity={0.9}>
+      //  {/* onPress={() => navigation.navigate('ProductScreen', product)}> */}
         <View style={styles.card}>
           <View style={{alignItems: 'center', top: -40}}>
             <Image
@@ -125,11 +155,11 @@ const HomeScreen = ({navigation}) => {
               ${product.price}
             </Text>
             <View style={styles.addToCartBtn}>
-              <Icon name="heart" size={15} color={colours.white} />
+              <Icon name="heart" size={15} color={colours.white} onPress={() => likeProduct(product)}/>
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      // {/* </TouchableHighlight> */}
     );
   };
 

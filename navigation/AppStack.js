@@ -7,10 +7,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import HomeScreen from '../screens/HomeScreen';
-import ChatScreen from '../screens/ChatScreen';
+import LikesScreen from '../screens/LikesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AddPostScreen from '../screens/AddPostScreen';
-import MessagesScreen from '../screens/MessagesScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ProductScreen from '../screens/ProductScreen';
 
@@ -106,16 +105,14 @@ const FeedStack = ({navigation}) => (
   </Stack.Navigator>
 );
 
-const MessageStack = ({navigation}) => (
+const LikesStack = ({navigation}) => (
   <Stack.Navigator>
-    <Stack.Screen name="Messages" component={MessagesScreen} />
     <Stack.Screen
-      name="Chat"
-      component={ChatScreen}
-      options={({route}) => ({
-        title: route.params.userName,
-        headerBackTitleVisible: false,
-      })}
+      name="Likes"
+      component={LikesScreen}
+      options={{
+        headerShown: true,
+      }}
     />
   </Stack.Navigator>
 );
@@ -179,8 +176,8 @@ const AppStack = () => {
         })}
       />
       <Tab.Screen
-        name="Messages"
-        component={MessageStack}
+        name="Likes"
+        component={LikesStack}
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           // Or Hide tabbar when push!
@@ -189,7 +186,7 @@ const AppStack = () => {
           // tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <Ionicons
-              name="chatbox-ellipses-outline"
+              name="heart"
               color={color}
               size={size}
             />
