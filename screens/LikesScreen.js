@@ -10,11 +10,11 @@ export default function LikesScreen(props) {
   const [entities, setEntities] = useState([]);
   const {user, logout} = useContext(AuthContext);
 
-  const unlikeProduct = async (product) => {
+  const unlikeProduct = async (id) => {
 
     firestore()
       .collection('likes')
-      .doc(product.name)
+      .doc(id)
       .update({
         status: "unliked",
       })
@@ -52,7 +52,7 @@ export default function LikesScreen(props) {
               justifyContent: 'space-between',
             }}>
             <View style={styles.addToCartBtn}>
-              <Icon name="heart" size={15} color={colours.white} onPress={() => unlikeProduct(product)}/>
+              <Icon name="heart" size={15} color={colours.white} onPress={() => unlikeProduct(product.id)}/>
             </View>
           </View>
         </View>
@@ -68,9 +68,9 @@ export default function LikesScreen(props) {
         (querySnapshot) => {
           const newEntities = [];
           querySnapshot.forEach((doc) => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
+            const like = doc.data();
+            like.id = doc.id;
+            newEntities.push(like);
           });
           setEntities(newEntities);
         },
