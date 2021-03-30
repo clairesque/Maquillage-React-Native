@@ -88,7 +88,7 @@ const SignupScreen = ({navigation}) => {
       <TouchableOpacity
         style={styles.navButton}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.navButtonText}>Have an account? Sign In</Text>
+        <Text style={styles.navButtonText}>Have an account? Sign in here.</Text>
       </TouchableOpacity>
     </View>
   );
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     color: '#051d5f',
   },
   navButton: {
-    marginTop: 15,
+    marginTop: 20,
   },
   navButtonText: {
     fontSize: 18,

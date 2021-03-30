@@ -21,11 +21,8 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={require('../assets/rn-social-logo.png')}
-        style={styles.logo}
-      />
-      <Text style={styles.text}>maquillage</Text>
+     
+      <Text style={styles.text}>Login to your account</Text>
 
       <FormInput
         labelValue={email}
@@ -74,7 +71,7 @@ const LoginScreen = ({navigation}) => {
         style={styles.forgotButton}
         onPress={() => navigation.navigate('Signup')}>
         <Text style={styles.navButtonText}>
-          Don't have an acount? Create here
+          No account? Sign up here.
         </Text>
       </TouchableOpacity>
     </ScrollView>
@@ -88,7 +85,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    paddingTop: 50
+    paddingTop: 50,
+    marginTop: 250
   },
   logo: {
     height: 150,
@@ -98,7 +96,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Kufam-SemiBoldItalic',
     fontSize: 28,
-    marginBottom: 10,
+    marginBottom: 30,
     color: '#051d5f',
   },
   navButton: {
