@@ -108,7 +108,7 @@ const FeedStack = ({navigation}) => (
 const LikesStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Likes"
+      name="For You"
       component={LikesScreen}
       options={{
         headerShown: true,
@@ -176,7 +176,7 @@ const AppStack = () => {
         })}
       />
       <Tab.Screen
-        name="Likes"
+        name="For You"
         component={LikesStack}
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),

@@ -1,23 +1,25 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import colours from '../constants/colours';
 
-const {width} = Dimensions.get('screen');
-const cardWidth = width / 2 - 20;
+const width = Dimensions.get('window').width / 2 - 30;
 
 export default StyleSheet.create({
   listContainer: {
     marginTop: 20,
-    padding: 20,
   },
   card: {
-    height: 220,
-    width: cardWidth,
-    marginHorizontal: 10,
-    marginBottom: 20,
-    marginTop: 50,
-    borderRadius: 15,
-    elevation: 13,
+    height: 225,
     backgroundColor: colours.white,
+    width,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    marginBottom: 10,
+    padding: 15,
+  },
+  header: {
+    marginTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   addToCartBtn: {
     height: 30,
