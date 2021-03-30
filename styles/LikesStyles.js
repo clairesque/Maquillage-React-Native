@@ -1,7 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import colours from '../constants/colours';
 
-const width = Dimensions.get('window').width / 2 - 30;
 
 export default StyleSheet.create({
   listContainer: {
@@ -10,7 +9,7 @@ export default StyleSheet.create({
   card: {
     height: 225,
     backgroundColor: colours.white,
-    width,
+    width: 180,
     marginHorizontal: 5,
     borderRadius: 10,
     marginBottom: 10,

@@ -105,7 +105,7 @@ const HomeScreen = ({navigation}) => {
             <View
               style={{
                 backgroundColor:
-                  selectedFilterIndex == index ? colours.primary : colours.grey,
+                  selectedFilterIndex == index ? colours.secondary : colours.grey,
                 ...styles.filterBtn,
               }}>
               <Text

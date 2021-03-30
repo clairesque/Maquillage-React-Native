@@ -84,7 +84,7 @@ const ProfileScreen = ({navigation, route}) => {
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
             <Text style={styles.userInfoTitle}>Email</Text>
-            <Text style={styles.userInfoSubTitle}>{userData.email}</Text>
+            <Text style={styles.userInfoSubTitle}>{userData.email ? userData.email : 'selio24@gmail.com'}</Text>
           </View>
         </View>
 
