@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-
+import colours from '../constants/colours';
 import Onboarding from 'react-native-onboarding-swiper';
 
 const Dots = ({selected}) => {
@@ -14,7 +14,7 @@ const Dots = ({selected}) => {
                 width:6,
                 height: 6,
                 marginHorizontal: 3,
-                backgroundColor
+                backgroundColor,
             }}
         />
     );
@@ -22,19 +22,19 @@ const Dots = ({selected}) => {
 
 const Skip = ({...props}) => (
     <TouchableOpacity
-        style={{marginHorizontal:10}}
+        style={{marginHorizontal:15}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Skip</Text>
+        <Text style={{fontSize:16, fontWeight: 'bold'}}>Skip</Text>
     </TouchableOpacity>
 );
 
 const Next = ({...props}) => (
     <TouchableOpacity
-        style={{marginHorizontal:10}}
+        style={{marginHorizontal:15}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Next</Text>
+        <Text style={{fontSize:16, fontWeight: 'bold'}}>Next</Text>
     </TouchableOpacity>
 );
 
@@ -43,7 +43,7 @@ const Done = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Done</Text>
+        <Text style={{fontSize:16, fontWeight: 'bold'}}>Done</Text>
     </TouchableOpacity>
 );
 
@@ -56,24 +56,22 @@ const OnboardingScreen = ({navigation}) => {
         DotComponent={Dots}
         onSkip={() => navigation.replace("Login")}
         onDone={() => navigation.navigate("Login")}
+        titleStyles={{fontFamily:'Lato-Bold', fontSize:34, color:colours.tertiary}}
         pages={[
           {
-            backgroundColor: '#a6e4d0',
-            image: <Image source={require('../assets/onboarding-img1.png')} />,
-            title: 'Connect to the World',
-            subtitle: 'A New Way To Connect With The World',
+            backgroundColor: colours.light,
+            image: <Image source={require('../assets/Onboarding1.png')} resizeMode="contain" style={{ width: 300, height: 400 }} />,
+            title: 'Find clean makeup',
           },
           {
-            backgroundColor: '#fdeb93',
-            image: <Image source={require('../assets/onboarding-img2.png')} />,
-            title: 'Share Your Favorites',
-            subtitle: 'Share Your Thoughts With Similar Kind of People',
+            backgroundColor: colours.primary,
+            image: <Image source={require('../assets/Onboarding3.png')} resizeMode="contain" style={{ width: 400, height: 400 }} />,
+            title: 'Hassle-free process',
           },
           {
-            backgroundColor: '#e9bcbe',
-            image: <Image source={require('../assets/onboarding-img3.png')} />,
-            title: 'Become The Star',
-            subtitle: "Let The Spot Light Capture You",
+            backgroundColor: colours.light,
+            image: <Image source={require('../assets/Onboarding2.png')} resizeMode="contain" style={{ width: 400, height: 400 }} />,
+            title: 'Based on your skin type',
           },
         ]}
       />
