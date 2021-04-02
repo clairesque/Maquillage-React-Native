@@ -54,8 +54,7 @@ const EditProfileScreen = () => {
     .collection('users')
     .doc(user.uid)
     .update({
-      fname: userData.fname,
-      lname: userData.lname,
+      name: userData.name,
       about: userData.about,
       phone: userData.phone,
       country: userData.country,
@@ -250,7 +249,7 @@ const EditProfileScreen = () => {
             </View>
           </TouchableOpacity>
           <Text style={{marginTop: 10, fontSize: 18, fontWeight: 'bold'}}>
-            {userData ? userData.fname : ''} {userData ? userData.lname : ''}
+            {userData ? userData.name : ''}
           </Text>
           {/* <Text>{user.uid}</Text> */}
         </View>
@@ -258,22 +257,11 @@ const EditProfileScreen = () => {
         <View style={styles.action}>
           <FontAwesome name="user-o" color="#333333" size={20} />
           <TextInput
-            placeholder="First Name"
+            placeholder="Name"
             placeholderTextColor="#666666"
             autoCorrect={false}
-            value={userData ? userData.fname : ''}
-            onChangeText={(txt) => setUserData({...userData, fname: txt})}
-            style={styles.textInput}
-          />
-        </View>
-        <View style={styles.action}>
-          <FontAwesome name="user-o" color="#333333" size={20} />
-          <TextInput
-            placeholder="Last Name"
-            placeholderTextColor="#666666"
-            value={userData ? userData.lname : ''}
-            onChangeText={(txt) => setUserData({...userData, lname: txt})}
-            autoCorrect={false}
+            value={userData ? userData.name : ''}
+            onChangeText={(txt) => setUserData({...userData, name: txt})}
             style={styles.textInput}
           />
         </View>

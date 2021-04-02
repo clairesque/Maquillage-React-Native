@@ -6,30 +6,21 @@ import SocialButton from '../components/SocialButton';
 import {AuthContext} from '../navigation/AuthProvider';
 
 const SignupScreen = ({navigation}) => {
-  const [fname, setFirstName] = useState();
-  const [lname, setLastName] = useState();
+  const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
   const {register} = useContext(AuthContext);
-
+  const details = [{"name": name, "email": email, "password": password}]
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Create an account</Text>
 
       <FormInput
-        labelValue={fname}
-        onChangeText={(fname) => setFirstName(fname)}
-        placeholderText="First Name"
-        iconType="user"
-        autoCorrect={false}
-      />
-
-      <FormInput
-        labelValue={lname}
-        onChangeText={(lname) => setLastName(lname)}
-        placeholderText="Last Name"
+        labelValue={name}
+        onChangeText={(name) => setName(name)}
+        placeholderText="Name"
         iconType="user"
         autoCorrect={false}
       />
@@ -62,9 +53,11 @@ const SignupScreen = ({navigation}) => {
 
       <FormButton
         buttonTitle="Sign Up"
-        onPress={() => register(fname, lname, email, password)}
+        // onPress={() => register(name, email, password)}
+        onPress={() => navigation.navigate('Preferences', details)}
+        
       />
-
+{/* {console.log(name)} */}
       {Platform.OS === 'android' ? (
         <View>
           <SocialButton
@@ -132,3 +125,4 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
 });
+

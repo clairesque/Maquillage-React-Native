@@ -114,8 +114,7 @@ export const AuthProvider = ({children}) => {
               //with the appropriate details.
               firestore().collection('users').doc(auth().currentUser.uid)
               .set({
-                  fname: '',
-                  lname: '',
+                  name: '',
                   email: email,
                   createdAt: firestore.Timestamp.fromDate(new Date()),
                   userImg: null,

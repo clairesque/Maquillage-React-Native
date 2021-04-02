@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import PreferencesScreen from '../screens/PreferencesScreen';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -70,8 +71,14 @@ const AuthStack = () => {
           ),
         })}
       />
+      <Stack.Screen
+        name="Preferences"
+        component={PreferencesScreen}
+        options={{header: () => null}}
+      />
     </Stack.Navigator>
   );
 };
 
 export default AuthStack;
+

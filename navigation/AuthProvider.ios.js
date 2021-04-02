@@ -5,7 +5,6 @@ import firestore from '@react-native-firebase/firestore';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-  const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null);
 
   return (
@@ -20,7 +19,7 @@ export const AuthProvider = ({children}) => {
             console.log(e);
           }
         },
-        register: async (fname, lname, email, password) => {
+        register: async (email, password) => {
           try {
             await auth().createUserWithEmailAndPassword(email, password)
             .then(() => {
@@ -28,8 +27,7 @@ export const AuthProvider = ({children}) => {
               //with the appropriate details.
               firestore().collection('users').doc(auth().currentUser.uid)
               .set({
-                  fname: fname,
-                  lname: lname,
+                  name: '',
                   email: email,
                   createdAt: firestore.Timestamp.fromDate(new Date()),
                   userImg: null,
@@ -59,3 +57,4 @@ export const AuthProvider = ({children}) => {
     </AuthContext.Provider>
   );
 };
+
