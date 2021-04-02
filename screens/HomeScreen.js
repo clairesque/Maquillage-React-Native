@@ -23,7 +23,45 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
 import filters from '../constants/filters';
 import products from '../constants/products';
-
+export const Card = ({product}) => {
+  return (
+    // <TouchableHighlight
+    //   underlayColor={colours.white}
+    //   activeOpacity={0.9}>
+    //  {/* onPress={() => navigation.navigate('ProductScreen', product)}> */}
+      <View style={styles.card}>
+        <View style={{alignItems: 'center', top: -40}}>
+          <Image
+            source={{uri: product.image_link}}
+            style={{height: 120, width: 120}}
+          />
+        </View>
+        <View style={{marginHorizontal: 20}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            {product.name}
+          </Text>
+          <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
+            {product.brand}
+          </Text>
+        </View>
+        <View
+          style={{
+            marginTop: 10,
+            marginHorizontal: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            ${product.price}
+          </Text>
+          <View style={styles.addToCartBtn}>
+            <Icon name="heart" size={15} color={colours.white} onPress={() => likeProduct(product)}/>
+          </View>
+        </View>
+      </View>
+    // {/* </TouchableHighlight> */}
+  );
+};
 const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
@@ -124,45 +162,7 @@ const HomeScreen = ({navigation}) => {
       </ScrollView>
     );
   };
-  const Card = ({product}) => {
-    return (
-      // <TouchableHighlight
-      //   underlayColor={colours.white}
-      //   activeOpacity={0.9}>
-      //  {/* onPress={() => navigation.navigate('ProductScreen', product)}> */}
-        <View style={styles.card}>
-          <View style={{alignItems: 'center', top: -40}}>
-            <Image
-              source={{uri: product.image_link}}
-              style={{height: 120, width: 120}}
-            />
-          </View>
-          <View style={{marginHorizontal: 20}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              {product.name}
-            </Text>
-            <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
-              {product.brand}
-            </Text>
-          </View>
-          <View
-            style={{
-              marginTop: 10,
-              marginHorizontal: 20,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              ${product.price}
-            </Text>
-            <View style={styles.addToCartBtn}>
-              <Icon name="heart" size={15} color={colours.white} onPress={() => likeProduct(product)}/>
-            </View>
-          </View>
-        </View>
-      // {/* </TouchableHighlight> */}
-    );
-  };
+  
 
   return (
     <SafeAreaView style={{flex: 1}}>

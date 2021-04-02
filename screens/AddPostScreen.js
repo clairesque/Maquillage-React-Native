@@ -1,193 +1,138 @@
-import React, {useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  Platform,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import ActionButton from 'react-native-action-button';
-import Icon from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-crop-picker';
-
-import storage from '@react-native-firebase/storage';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import colours from '../constants/colours';
+import styles from '../styles/Carousel';
+import {sliderWidth, itemWidth} from '../styles/SliderEntry';
+import Carousel from 'react-native-snap-carousel';
+import SliderEntry from '../components/SliderEntry';
+import products from '../constants/products';
+const SLIDER_1_FIRST_ITEM = 1;
 
-import {
-  InputField,
-  InputWrapper,
-  AddImage,
-  SubmitBtn,
-  SubmitBtnText,
-  StatusWrapper,
-} from '../styles/AddPost';
-
-import { AuthContext } from '../navigation/AuthProvider';
-
-const AddPostScreen = () => {
-  const {user, logout} = useContext(AuthContext);
-
-  const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [transferred, setTransferred] = useState(0);
-  const [post, setPost] = useState(null);
-
-  const takePhotoFromCamera = () => {
-    ImagePicker.openCamera({
-      width: 1200,
-      height: 780,
-      cropping: true,
-    }).then((image) => {
-      console.log(image);
-      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-      setImage(imageUri);
-    });
-  };
-
-  const choosePhotoFromLibrary = () => {
-    ImagePicker.openPicker({
-      width: 1200,
-      height: 780,
-      cropping: true,
-    }).then((image) => {
-      console.log(image);
-      const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
-      setImage(imageUri);
-    });
-  };
-
-  const submitPost = async () => {
-    const imageUrl = await uploadImage();
-    console.log('Image Url: ', imageUrl);
-    console.log('Post: ', post);
-
-    firestore()
-    .collection('posts')
-    .add({
-      userId: user.uid,
-      post: post,
-      postImg: imageUrl,
-      postTime: firestore.Timestamp.fromDate(new Date()),
-      likes: null,
-      comments: null,
-    })
-    .then(() => {
-      console.log('Post Added!');
-      Alert.alert(
-        'Post published!',
-        'Your post has been published Successfully!',
-      );
-      setPost(null);
-    })
-    .catch((error) => {
-      console.log('Something went wrong with added post to firestore.', error);
-    });
+export default class AddPostScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+    };
   }
 
-  const uploadImage = async () => {
-    if( image == null ) {
-      return null;
+  getByDescription(text) {
+    var newData = [];
+    if (text) {
+      newData = products.filter(function (item) {
+        const searchName = item.description
+          ? item.description.toLowerCase()
+          : ''.toLowerCase();
+        const textData = text.toLowerCase();
+        return searchName.indexOf(textData) > -1;
+      });
     }
-    const uploadUri = image;
-    let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+    return newData;
+  }
 
-    // Add timestamp to File Name
-    const extension = filename.split('.').pop(); 
-    const name = filename.split('.').slice(0, -1).join('.');
-    filename = name + Date.now() + '.' + extension;
-
-    setUploading(true);
-    setTransferred(0);
-
-    const storageRef = storage().ref(`photos/${filename}`);
-    const task = storageRef.putFile(uploadUri);
-
-    // Set transferred state
-    task.on('state_changed', (taskSnapshot) => {
-      console.log(
-        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
-      );
-
-      setTransferred(
-        Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
-          100,
-      );
-    });
-
-    try {
-      await task;
-
-      const url = await storageRef.getDownloadURL();
-
-      setUploading(false);
-      setImage(null);
-
-      // Alert.alert(
-      //   'Image uploaded!',
-      //   'Your image has been uploaded to the Firebase Cloud Storage Successfully!',
-      // );
-      return url;
-
-    } catch (e) {
-      console.log(e);
-      return null;
+  getByTags(text) {
+    var newData = [];
+    if (text) {
+      newData = products.filter(function (item) {
+        const tags = item.tag_list.toString();
+        const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
+        const textData = text.toLowerCase();
+        return searchName.indexOf(textData) > -1;
+      });
     }
-
+    return newData;
+  }
+  _renderItem({item, index}) {
+    return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+  }
+  _renderItemWithParallax = ({item, index}, parallaxProps) => {
+    return (
+      <SliderEntry
+        data={item}
+        even={(index + 1) % 2 === 0}
+        parallax={true}
+        parallaxProps={parallaxProps}
+      />
+    );
   };
-
-  return (
-    <View style={styles.container}>
-      <InputWrapper>
-        {image != null ? <AddImage source={{uri: image}} /> : null}
-
-        <InputField
-          placeholder="What's on your mind?"
-          multiline
-          numberOfLines={4}
-          value={post}
-          onChangeText={(content) => setPost(content)}
+  default(number, skinType, products) {
+    return (
+      <View style={styles.exampleContainer}>
+        <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text>
+        <Text style={styles.subtitle}>Since you have <Text style={{fontWeight: 'bold'}}>{skinType}</Text> skin...</Text>
+        <Carousel
+          ref={(c) => (this._slider1Ref = c)}
+          data={products}
+          renderItem={this._renderItemWithParallax}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          hasParallaxImages={true}
+          firstItem={SLIDER_1_FIRST_ITEM}
+          inactiveSlideScale={0.94}
+          inactiveSlideOpacity={0.7}
+          containerCustomStyle={styles.slider}
+          contentContainerCustomStyle={styles.sliderContentContainer}
+          loop={true}
+          loopClonesPerSide={2}
+          autoplay={true}
+          autoplayDelay={500}
+          autoplayInterval={3000}
+          onSnapToItem={(index) => this.setState({slider1ActiveSlide: index})}
         />
-        {uploading ? (
-          <StatusWrapper>
-            <Text>{transferred} % Completed!</Text>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </StatusWrapper>
-        ) : (
-          <SubmitBtn onPress={submitPost}>
-            <SubmitBtnText>Post</SubmitBtnText>
-          </SubmitBtn>
-        )}
-      </InputWrapper>
-      <ActionButton buttonColor="#2e64e5">
-        <ActionButton.Item
-          buttonColor="#9b59b6"
-          title="Take Photo"
-          onPress={takePhotoFromCamera}>
-          <Icon name="camera-outline" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-        <ActionButton.Item
-          buttonColor="#3498db"
-          title="Choose Photo"
-          onPress={choosePhotoFromLibrary}>
-          <Icon name="md-images-outline" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-      </ActionButton>
-    </View>
-  );
-};
+      </View>
+    );
+  }
+  layout(number, productType, products) {
+    return (
+      <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
+        <Text
+          style={[
+            styles.title,
+            styles.titleDark,
+          ]}>{`Recommendation ${number}`}</Text>
+        <Text style={[styles.subtitle]}>Few <Text style={{fontWeight: 'bold'}}>{productType}</Text> products for you...</Text>
+        <Carousel
+          data={products}
+          renderItem={this._renderItem}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          containerCustomStyle={styles.slider}
+          contentContainerCustomStyle={styles.sliderContentContainer}
+          layout={'stack'}
+          loop={true}
+        />
+      </View>
+    );
+  }
+  render() {
+    const skinType = 'dry';
+    const productType = 'natural';
+    const skinRecommender = this.default(
+      1,
+      skinType,
+      this.getByDescription(skinType),
+    );
+    const typeRecommender = this.layout(
+      2,
+      productType,
+      this.getByTags(productType),
+    );
+    return (
+      <View
+        style={style.container}
+        scrollEventThrottle={200}
+        directionalLockEnabled={true}>
+        {skinRecommender}
+        {typeRecommender}
+      </View>
+    );
+  }
+}
 
-export default AddPostScreen;
-
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: 'white',
+    backgroundColor: colours.secondary,
   },
 });
