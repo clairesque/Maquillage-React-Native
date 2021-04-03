@@ -36,6 +36,7 @@ const ProductScreen = ({navigation, route}) => {
           }}>
           <Image
             source={{uri: item.image_link}}
+            defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
             style={{
               width: '100%',
               height: undefined,

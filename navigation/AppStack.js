@@ -9,7 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import HomeScreen from '../screens/HomeScreen';
 import LikesScreen from '../screens/LikesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import AddPostScreen from '../screens/AddPostScreen';
+import RecommendationsScreen from '../screens/RecommendationsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ProductScreen from '../screens/ProductScreen';
 
@@ -38,15 +38,15 @@ const FeedStack = ({navigation}) => (
               size={22}
               backgroundColor="#fff"
               color="#162F54"
-              onPress={() => navigation.navigate('AddPost')}
+              onPress={() => navigation.navigate('Recommendations')}
             />
           </View>
         ),
       }}
     />
     <Stack.Screen
-      name="AddPost"
-      component={AddPostScreen}
+      name="Recommendations"
+      component={RecommendationsScreen}
       options={{
         title: '',
         headerTitleAlign: 'center',

@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
             console.log(e);
           }
         },
-        register: async (email, password) => {
+        register: async (name, email, password) => {
           try {
             await auth().createUserWithEmailAndPassword(email, password)
             .then(() => {
@@ -27,7 +27,7 @@ export const AuthProvider = ({children}) => {
               //with the appropriate details.
               firestore().collection('users').doc(auth().currentUser.uid)
               .set({
-                  name: '',
+                  name: name,
                   email: email,
                   createdAt: firestore.Timestamp.fromDate(new Date()),
                   userImg: null,

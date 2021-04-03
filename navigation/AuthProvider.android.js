@@ -39,8 +39,7 @@ export const AuthProvider = ({children}) => {
             //   // console.log('current User', auth().currentUser);
             //   firestore().collection('users').doc(auth().currentUser.uid)
             //   .set({
-            //       fname: '',
-            //       lname: '',
+            //       name: '',
             //       email: auth().currentUser.email,
             //       createdAt: firestore.Timestamp.fromDate(new Date()),
             //       userImg: null,
@@ -87,8 +86,7 @@ export const AuthProvider = ({children}) => {
             //   console.log('current User', auth().currentUser);
             //   firestore().collection('users').doc(auth().currentUser.uid)
             //   .set({
-            //       fname: '',
-            //       lname: '',
+            //       name: '',
             //       email: auth().currentUser.email,
             //       createdAt: firestore.Timestamp.fromDate(new Date()),
             //       userImg: null,
@@ -106,7 +104,7 @@ export const AuthProvider = ({children}) => {
             console.log({error});
           }
         },
-        register: async (email, password) => {
+        register: async (name, email, password) => {
           try {
             await auth().createUserWithEmailAndPassword(email, password)
             .then(() => {
@@ -114,7 +112,7 @@ export const AuthProvider = ({children}) => {
               //with the appropriate details.
               firestore().collection('users').doc(auth().currentUser.uid)
               .set({
-                  name: '',
+                  name: name,
                   email: email,
                   createdAt: firestore.Timestamp.fromDate(new Date()),
                   userImg: null,

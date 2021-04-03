@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -9,41 +9,49 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import { AuthContext } from '../navigation/AuthProvider';
-import {firebase} from '../src/firebase/config';
+import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
-import {colors, SearchBar} from 'react-native-elements';
-import {
-  ScrollView,
-  TextInput,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {SearchBar} from 'react-native-elements';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
 import filters from '../constants/filters';
 import products from '../constants/products';
-export const Card = ({product}) => {
-  return (
-    // <TouchableHighlight
-    //   underlayColor={colours.white}
-    //   activeOpacity={0.9}>
-    //  {/* onPress={() => navigation.navigate('ProductScreen', product)}> */}
+
+const {width} = Dimensions.get('screen');
+const cardWidth = width / 2 - 20;
+
+const HomeScreen = ({navigation}) => {
+  const {user, logout} = useContext(AuthContext);
+  const [search, setSearch] = useState('');
+  const [like, setLike] = useState(null);
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [masterDataSource, setMasterDataSource] = useState([]);
+  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
+
+  const Card = ({product}) => {
+    return (
       <View style={styles.card}>
-        <View style={{alignItems: 'center', top: -40}}>
-          <Image
-            source={{uri: product.image_link}}
-            style={{height: 120, width: 120}}
-          />
-        </View>
-        <View style={{marginHorizontal: 20}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-            {product.name}
-          </Text>
-          <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
-            {product.brand}
-          </Text>
-        </View>
+        <TouchableOpacity
+          underlayColor={colours.white}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('ProductScreen', product)}>
+          <View style={{alignItems: 'center', top: -40}}>
+            <Image
+              source={{uri: product.image_link}}
+              style={{height: 120, width: 120}}
+              defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
+            />
+          </View>
+          <View style={{marginHorizontal: 20}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              {product.name}
+            </Text>
+            <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
+              {product.brand}
+            </Text>
+          </View>
+        </TouchableOpacity>
         <View
           style={{
             marginTop: 10,
@@ -55,27 +63,19 @@ export const Card = ({product}) => {
             ${product.price}
           </Text>
           <View style={styles.addToCartBtn}>
-            <Icon name="heart" size={15} color={colours.white} onPress={() => likeProduct(product)}/>
+            <Icon
+              name="heart"
+              size={15}
+              color={colours.white}
+              onPress={() => likeProduct(product)}
+            />
           </View>
         </View>
       </View>
-    // {/* </TouchableHighlight> */}
-  );
-};
-const {width} = Dimensions.get('screen');
-const cardWidth = width / 2 - 20;
-
-const HomeScreen = ({navigation}) => {
-  const {user, logout} = useContext(AuthContext);
-  const [search, setSearch] = useState('');
-  const [like, setLike] = useState(null);
-  // const [filteredDataSource, setFilteredDataSource] = useState([]);
-  // const [masterDataSource, setMasterDataSource] = useState([]);
-  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
+    );
+  };
   
   const likeProduct = async (item) => {
-    console.log('Like: ', like);
-
     firestore()
       .collection('likes')
       .add({
@@ -83,52 +83,77 @@ const HomeScreen = ({navigation}) => {
         brand: item.brand,
         name: item.name,
         image_link: item.image_link,
-        status: "liked"
+        status: 'liked',
       })
       .then(() => {
-        Alert.alert(
-          'You have liked this product.',
-        );
+        Alert.alert('You have liked this product.');
         setLike(null);
       })
       .catch((error) => {
-        console.log(
-          'Something went wrong with this.',
-          error,
-        );
+        console.log('Something went wrong with this.', error);
       });
   };
-  // useEffect(() => {
-  //   fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
-  //     .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       setFilteredDataSource(responseJson);
-  //       setMasterDataSource(responseJson);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
 
-  // const searchFilterFunction = (text) => {
-  //   if (text) {
-  //     const newData = masterDataSource.filter(function (item) {
-  //       const searchName = item.name
-  //         ? item.name.toLowerCase()
-  //         : ''.toLowerCase();
-  //       const searchBrand = item.brand
-  //         ? item.brand.toLowerCase()
-  //         : ''.toLowerCase();
-  //       const textData = text.toLowerCase();
-  //       return (searchName + searchBrand).indexOf(textData) > -1;
-  //     });
-  //     setFilteredDataSource(newData);
-  //     setSearch(text);
-  //   } else {
-  //     setFilteredDataSource(masterDataSource);
-  //     setSearch(text);
-  //   }
-  // };
+  useEffect(() => {
+    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setFilteredDataSource(responseJson);
+        setMasterDataSource(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const checkImageURL = (url) => {
+    fetch(url)
+      .then((res) => {
+        if (res.status == 404) {
+          console.log('image not found!');
+          return '/Users/apple/Developer/maquillage/assets/logo.png';
+        } else {
+          return url;
+        }
+      })
+      .catch((err) => {
+        console.log('image not found!');
+        return '/Users/apple/Developer/maquillage/assets/logo.png';
+      });
+  };
+
+  const getByTags = (text) => {
+    var newData = [];
+    if (text) {
+      newData = filteredDataSource.filter(function (item) {
+        const tags = item.tag_list.toString();
+        const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
+        const textData = text.toLowerCase();
+        return searchName.indexOf(textData) > -1;
+      });
+    }
+    return newData;
+  };
+
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = masterDataSource.filter(function (item) {
+        const searchName = item.name
+          ? item.name.toLowerCase()
+          : ''.toLowerCase();
+        const searchBrand = item.brand
+          ? item.brand.toLowerCase()
+          : ''.toLowerCase();
+        const textData = text.toLowerCase();
+        return (searchName + searchBrand).indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
   const ListFilters = () => {
     return (
       <ScrollView
@@ -143,7 +168,9 @@ const HomeScreen = ({navigation}) => {
             <View
               style={{
                 backgroundColor:
-                  selectedFilterIndex == index ? colours.secondary : colours.grey,
+                  selectedFilterIndex == index
+                    ? colours.secondary
+                    : colours.grey,
                 ...styles.filterBtn,
               }}>
               <Text
@@ -162,7 +189,6 @@ const HomeScreen = ({navigation}) => {
       </ScrollView>
     );
   };
-  
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -192,12 +218,9 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={products.slice(0, 10)}
+          data={filteredDataSource.slice(0, 30)}
           numColumns={2}
           initialNumToRender={6}
-          //keyExtractor={(item, index) => index.toString()}
-          //ItemSeparatorComponent={ItemSeparatorView}
-          //renderItem={ItemView}
           renderItem={({item}) => <Card product={item} />}
         />
       </View>

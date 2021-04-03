@@ -32,7 +32,7 @@ const PreferencesScreen = ({navigation, route}) => {
         Alert.alert(
           'You have successfully registered!',
         );
-        register(details[0].email, details[0].password)
+        register(details[0].name, details[0].email, details[0].password)
       })
       .catch((error) => {
         console.log(

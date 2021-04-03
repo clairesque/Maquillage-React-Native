@@ -5,9 +5,9 @@ const filters = [
 ];
 
 export const filtersNext = [
-  {id: '4', name: 'Alcohol-free'},
-  {id: '5', name: 'Oil-free'},
-  {id: '6', name: 'Cruelty-free'},
+  {id: '4', name: 'Alcohol free'},
+  {id: '5', name: 'Oil free'},
+  {id: '6', name: 'Dairy free'},
 ];
 
 export default filters;

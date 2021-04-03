@@ -13,7 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../navigation/AuthProvider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function LikesScreen(props) {
+function LikesScreen(props, navigation) {
   const [entities, setEntities] = useState([]);
   const {user, logout} = useContext(AuthContext);
 
@@ -33,20 +33,21 @@ export default function LikesScreen(props) {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate('Details', product)}>
+        onPress={() => navigation.navigate('ProductScreen', product)}>
         <View style={styles.card}>
           <View
             style={{
-              height: 100,
+              height: 80,
               alignItems: 'center',
             }}>
             <Image
               source={{uri: product.image_link}}
-              style={{width: 120, height: 125}}
+              defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
+              style={{width: 130, height: 105}}
             />
           </View>
 
-          <Text style={{fontWeight: 'bold', fontSize: 17, marginTop: 40}}>
+          <Text style={{fontWeight: 'bold', fontSize: 15, marginTop: 40}}>
             {product.name}
           </Text>
           <View
@@ -77,42 +78,6 @@ export default function LikesScreen(props) {
           </View>
         </View>
       </TouchableOpacity>
-    );
-  };
-  const Card2 = ({product}) => {
-    return (
-      //   <TouchableHighlight underlayColor={colours.white} activeOpacity={0.9}>
-      <View style={styles.card}>
-        <View style={{alignItems: 'center', bottom: 20}}>
-          <Image
-            source={{uri: product.image_link}}
-            style={{height: 120, width: 120}}
-          />
-        </View>
-        <View style={{marginHorizontal: 20}}>
-          <Text style={{fontSize: 17, fontWeight: 'bold'}}>{product.name}</Text>
-          <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
-            {product.brand}
-          </Text>
-        </View>
-        <View
-          style={{
-            marginTop: 10,
-            marginHorizontal: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <View style={styles.addToCartBtn}>
-            <Icon
-              name="heart"
-              size={15}
-              color={colours.white}
-              onPress={() => unlikeProduct(product.id)}
-            />
-          </View>
-        </View>
-      </View>
-      //   </TouchableHighlight>
     );
   };
 
@@ -169,3 +134,4 @@ export default function LikesScreen(props) {
     </SafeAreaView>
   );
 }
+export default LikesScreen
