@@ -106,22 +106,6 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-  const checkImageURL = (url) => {
-    fetch(url)
-      .then((res) => {
-        if (res.status == 404) {
-          console.log('image not found!');
-          return '/Users/apple/Developer/maquillage/assets/logo.png';
-        } else {
-          return url;
-        }
-      })
-      .catch((err) => {
-        console.log('image not found!');
-        return '/Users/apple/Developer/maquillage/assets/logo.png';
-      });
-  };
-
   const getByTags = (text) => {
     var newData = [];
     if (text) {
