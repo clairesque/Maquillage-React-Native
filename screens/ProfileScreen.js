@@ -48,9 +48,9 @@ const ProfileScreen = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}>
         <Image
           style={styles.userImg}
-          source={{uri: userData ? userData.userImg || 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg' : 'https://lh5.googleusercontent.com/-b0PKyNuQv5s/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclxAM4M1SCBGAO7Rp-QP6zgBEUkOQ/s96-c/photo.jpg'}}
+          source={{uri: userData ? userData.userImg || '/Users/apple/Developer/maquillage/assets/user_icon.png' : '/Users/apple/Developer/maquillage/assets/user_icon.png'}}
         />
-        <Text style={styles.userName}>{userData ? userData.name || 'Test' : 'Test'}</Text>
+        <Text style={styles.userName}>{userData ? userData.name || 'Test User' : 'Test User'}</Text>
         {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
         <Text style={styles.aboutUser}>
         {userData ? userData.about || 'No details added.' : ''}
@@ -84,8 +84,7 @@ const ProfileScreen = ({navigation, route}) => {
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
             <Text style={styles.userInfoTitle}>Email</Text>
-            <Text style={styles.userInfoSubTitle}>selio24@gmail.com
-            {/* {userData.email} */}
+            <Text style={styles.userInfoSubTitle}>{userData.email ? userData.email : 'test@gmail.com'}
             </Text>
           </View>
         </View>
