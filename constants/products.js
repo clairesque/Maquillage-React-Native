@@ -27,8 +27,8 @@ var products = [
   },
   {
     id: 1046,
-    brand: 'colourpop',
-    name: 'Lippie Stix',
+    brand: 'maybelline',
+    name: 'Maybelline Lippie Stix',
     price: '5.5',
     price_sign: '$',
     currency: 'CAD',

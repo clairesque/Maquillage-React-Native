@@ -8,6 +8,7 @@ import Carousel from 'react-native-snap-carousel';
 import SliderEntry from '../components/SliderEntry';
 import products from '../constants/products';
 import {AuthContext} from '../navigation/AuthProvider';
+import {ActivityIndicator} from 'react-native-paper';
 
 const RecommendationsScreen = ({navigation}) => {
   const SLIDER_1_FIRST_ITEM = 1;
@@ -26,6 +27,9 @@ const RecommendationsScreen = ({navigation}) => {
     fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
       .then((response) => response.json())
       .then((responseJson) => {
+        if (loading) {
+          setLoading(false);
+        }
         setFilteredDataSource(responseJson);
         setMasterDataSource(responseJson);
       })
@@ -159,13 +163,21 @@ const RecommendationsScreen = ({navigation}) => {
   var skinRecommender = defaultSlider(1, skinType, getByDescription(skinType));
   var typeRecommender = layout(2, productType, getByTags(productType));
 
-  return (
+  return !loading ? (
     <View
       style={style.container}
       scrollEventThrottle={200}
       directionalLockEnabled={true}>
       {skinRecommender}
       {typeRecommender}
+    </View>
+  ) : (
+    <View style={styles.containerActivity}>
+      <ActivityIndicator
+        color={colours.tertiary}
+        size="large"
+        style={styles.activityIndicator}
+      />
     </View>
   );
 };
@@ -176,5 +188,13 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colours.secondary,
+  },
+  containerActivity: {
+    height: 700,
+    backgroundColor: colours.secondary
+  },
+  activityIndicator: {
+    paddingTop: 100,
+    height: 80,
   },
 });

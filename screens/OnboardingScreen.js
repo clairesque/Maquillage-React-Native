@@ -56,7 +56,7 @@ const OnboardingScreen = ({navigation}) => {
         DotComponent={Dots}
         onSkip={() => navigation.replace("Login")}
         onDone={() => navigation.navigate("Login")}
-        titleStyles={{fontFamily:'Lato-Bold', fontSize:34, color:colours.tertiary}}
+        titleStyles={{fontSize:34, color:colours.tertiary}}
         pages={[
           {
             backgroundColor: colours.light,

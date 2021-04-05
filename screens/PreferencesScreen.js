@@ -228,14 +228,12 @@ const styles = StyleSheet.create({
     marginLeft: 90,
   },
   question: {
-    fontFamily: 'Lato-Regular',
     fontSize: 20,
     marginTop: 20,
     marginLeft: 25,
     color: colours.tertiary,
   },
   questionNext: {
-    fontFamily: 'Lato-Regular',
     fontSize: 20,
     marginLeft: 25,
     marginTop: 20,
@@ -243,7 +241,6 @@ const styles = StyleSheet.create({
     color: colours.tertiary,
   },
   questionThree: {
-    fontFamily: 'Lato-Regular',
     fontSize: 20,
     marginLeft: 25,
     marginTop: 20,

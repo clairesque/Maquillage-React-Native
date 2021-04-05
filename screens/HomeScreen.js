@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
 import {filtersAll} from '../constants/filters';
 import products from '../constants/products';
+import {ActivityIndicator} from 'react-native-paper';
 
 const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
@@ -25,20 +26,16 @@ const HomeScreen = ({navigation}) => {
   const {user, logout} = useContext(AuthContext);
   const [search, setSearch] = useState('');
   const [like, setLike] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
 
-  function splitProduct(namee, brandd) {
-    var name="Maybelline Lippie Stix";
-    var brand="maybelline"
+  function splitProduct(name, brand) {
     if (name.toLowerCase().includes(brand.toLowerCase())) {
-      filteredName = name.toLowerCase().replace(brand+' ', '')
-      console.log("filtered",filteredName)
+      filteredName = name.toLowerCase().replace(brand + ' ', '');
       return filteredName;
-    }
-    else {
-      console.log("not",name)
+    } else {
       return name;
     }
   }
@@ -60,8 +57,13 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
           <View style={{marginHorizontal: 20}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize'}}>
-              {splitProduct(product.name, product.brand)}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                textTransform: 'capitalize',
+              }}>
+              {product.name && product.brand ? splitProduct(product.name, product.brand) : product.name}
             </Text>
             <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
               {product.brand}
@@ -109,51 +111,58 @@ const HomeScreen = ({navigation}) => {
         console.log('Something went wrong with this.', error);
       });
   };
+  //REMOVE THIS TEMP
+  if (loading) {
+            setLoading(false);
+          }
+          //REMOVE THIS TEMP
+  // useEffect(() => {
+  //   fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       setFilteredDataSource(responseJson);
+  //       setMasterDataSource(responseJson);
+  //       if (loading) {
+  //         setLoading(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  // const searchFilterFunction = (text) => {
+  //   if (text) {
+  //     const newData = masterDataSource.filter(function (item) {
+  //       const searchName = item.name
+  //         ? item.name.toLowerCase()
+  //         : ''.toLowerCase();
+  //       const searchBrand = item.brand
+  //         ? item.brand.toLowerCase()
+  //         : ''.toLowerCase();
+  //       const textData = text.toLowerCase();
+  //       return (searchName + searchBrand).indexOf(textData) > -1;
+  //     });
+  //     setFilteredDataSource(newData);
+  //     setSearch(text);
+  //   } else {
+  //     setFilteredDataSource(masterDataSource);
+  //     setSearch(text);
+  //   }
+  // };
 
-  const searchFilterFunction = (text) => {
-    if (text) {
-      const newData = masterDataSource.filter(function (item) {
-        const searchName = item.name
-          ? item.name.toLowerCase()
-          : ''.toLowerCase();
-        const searchBrand = item.brand
-          ? item.brand.toLowerCase()
-          : ''.toLowerCase();
-        const textData = text.toLowerCase();
-        return (searchName + searchBrand).indexOf(textData) > -1;
-      });
-      setFilteredDataSource(newData);
-      setSearch(text);
-    } else {
-      setFilteredDataSource(masterDataSource);
-      setSearch(text);
-    }
-  };
-
-  const filterFunction = (text, index) => {
-    setSelectedFilterIndex(index)
-    const newData = masterDataSource.filter(function (item) {
-      const tags = item.tag_list.toString();
-      const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
-      const textData = text.toLowerCase();
-      return searchName.indexOf(textData) > -1;
-    });
-    setFilteredDataSource(newData);
-  };
+  // const filterFunction = (text, index) => {
+  //   setSelectedFilterIndex(index);
+  //   const newData = masterDataSource.filter(function (item) {
+  //     const tags = item.tag_list.toString();
+  //     const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
+  //     const textData = text.toLowerCase();
+  //     return searchName.indexOf(textData) > -1;
+  //   });
+  //   setFilteredDataSource(newData);
+  // };
   const ListFilters = () => {
-    return (
+    return !loading ? (
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -162,8 +171,7 @@ const HomeScreen = ({navigation}) => {
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
-            onPress={() => filterFunction(filter.name, index)}
-          >
+            onPress={() => filterFunction(filter.name, index)}>
             <View
               style={{
                 backgroundColor:
@@ -186,6 +194,14 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+    ) : (
+      <View style={styles.containerActivity}>
+        <ActivityIndicator
+          color={colours.tertiary}
+          size="large"
+          style={styles.activityIndicator}
+        />
+      </View>
     );
   };
 
@@ -217,7 +233,7 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={products.slice(0, 30)}
+          data={products}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}
@@ -267,7 +283,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerActivity: {
+    height: 660,
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80,
+  },
 });
 
 export default HomeScreen;
-

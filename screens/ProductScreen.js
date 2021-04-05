@@ -7,6 +7,15 @@ import colours from '../constants/colours';
 const ProductScreen = ({navigation, route}) => {
   const item = route.params;
 
+  function splitProduct(name, brand) {
+    if (name.toLowerCase().includes(brand.toLowerCase())) {
+      filteredName = name.toLowerCase().replace(brand+' ', '')
+      return filteredName;
+    }
+    else {
+      return name;
+    }
+  }
   function splitDescription(desc) {
     if (desc.includes(',') && !desc.includes('.')) {
       const parts = desc.split(',');
@@ -66,8 +75,9 @@ const ProductScreen = ({navigation, route}) => {
                 fontSize: 25,
                 fontWeight: 'bold',
                 color: colours.tertiary,
+                textTransform: 'capitalize'
               }}>
-              {item.name}
+              {splitProduct(item.name, item.brand)}
             </Text>
             <Text style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
               {item.brand}

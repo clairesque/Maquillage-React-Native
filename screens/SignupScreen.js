@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    fontFamily: 'Kufam-SemiBoldItalic',
     fontSize: 28,
     marginBottom: 10,
     color: '#051d5f',
@@ -110,7 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: '#2e64e5',
-    fontFamily: 'Lato-Regular',
   },
   textPrivate: {
     flexDirection: 'row',
@@ -121,7 +119,6 @@ const styles = StyleSheet.create({
   color_textPrivate: {
     fontSize: 13,
     fontWeight: '400',
-    fontFamily: 'Lato-Regular',
     color: 'grey',
   },
 });
