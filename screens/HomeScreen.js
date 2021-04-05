@@ -15,7 +15,7 @@ import {SearchBar} from 'react-native-elements';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
-import { filtersAll } from '../constants/filters';
+import {filtersAll} from '../constants/filters';
 import products from '../constants/products';
 
 const {width} = Dimensions.get('screen');
@@ -28,6 +28,21 @@ const HomeScreen = ({navigation}) => {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
+
+  function splitProduct(namee, brandd) {
+    var name="Maybelline Lippie Stix";
+    var brand="maybelline"
+    if (name.toLowerCase().includes(brand.toLowerCase())) {
+      filteredName = name.toLowerCase().replace(brand+' ', '')
+      console.log("filtered",filteredName)
+      return filteredName;
+    }
+    else {
+      console.log("not",name)
+      return name;
+    }
+  }
+
   const Card = ({product}) => {
     return (
       <View style={styles.card}>
@@ -45,8 +60,8 @@ const HomeScreen = ({navigation}) => {
             />
           </View>
           <View style={{marginHorizontal: 20}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              {product.name}
+            <Text style={{fontSize: 18, fontWeight: 'bold', textTransform: 'capitalize'}}>
+              {splitProduct(product.name, product.brand)}
             </Text>
             <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
               {product.brand}
@@ -202,7 +217,7 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={filteredDataSource.slice(0, 30)}
+          data={products.slice(0, 30)}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}
@@ -255,3 +270,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

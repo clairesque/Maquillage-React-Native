@@ -8,91 +8,99 @@ const ProductScreen = ({navigation, route}) => {
   const item = route.params;
 
   function splitDescription(desc) {
+    if (desc.includes(',') && !desc.includes('.')) {
+      const parts = desc.split(',');
+      const firstThree = parts.slice(0, 3);
+      filteredDescription = firstThree.join(',');
+    }
+    else {
     description = desc.split('.');
     filteredDescription = description
-      .slice(0, 3)
+      .slice(0, 2)
       .join('.')
       .replace(/([^.])$/, '$1.');
+    }
     return filteredDescription;
   }
 
   function toggleText(item) {
-    if(item.length===0){
+    if (item.length === 0) {
       tagText = null;
-    }
-    else {
-      tagText = <Text style={style.tags}>{'#tags:'}</Text>
+    } else {
+      tagText = <Text style={style.tags}>{'#tags:'}</Text>;
     }
     return tagText;
   }
 
   return (
     <SafeAreaView style={{backgroundColor: colours.white}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 280,
+        }}>
+        <Image
+          source={{uri: item.image_link}}
+          defaultSource={{
+            uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+          }}
+          style={{
+            width: '100%',
+            height: undefined,
+            aspectRatio: 1,
+            resizeMode: 'contain',
+          }}
+        />
+      </View>
+      <View style={style.details}>
         <View
           style={{
-            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            height: 280,
           }}>
-          <Image
-            source={{uri: item.image_link}}
-            defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
-            style={{
-              width: '100%',
-              height: undefined,
-              aspectRatio: 1,
-              resizeMode: 'contain',
-            }}
-          />
+          <View style={{marginHorizontal: 10}}>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                color: colours.tertiary,
+              }}>
+              {item.name}
+            </Text>
+            <Text style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
+              {item.brand}
+            </Text>
+          </View>
+          <View style={style.iconContainer}>
+            <Icon name="favorite-border" color={colours.primary} size={25} />
+          </View>
         </View>
-        <View style={style.details}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <View style={{marginHorizontal: 10}}>
+        <Text style={style.detailsText}>
+          {splitDescription(item.description)}
+        </Text>
+        {toggleText(item.tag_list)}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {item.tag_list.map((filter, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: colours.secondary,
+                ...style.filterBtn,
+              }}>
               <Text
                 style={{
-                  fontSize: 25,
+                  fontSize: 13,
                   fontWeight: 'bold',
                   color: colours.tertiary,
                 }}>
-                {item.name}
-              </Text>
-              <Text style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
-                {item.brand}
+                {filter}
               </Text>
             </View>
-            <View style={style.iconContainer}>
-              <Icon name="favorite-border" color={colours.primary} size={25} />
-            </View>
-          </View>
-          <Text style={style.detailsText}>
-            {splitDescription(item.description)}
-          </Text>
-          {toggleText(item.tag_list)}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {item.tag_list.map((filter, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: colours.secondary,
-                  ...style.filterBtn,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 'bold',
-                    color: colours.tertiary,
-                  }}>
-                  {filter}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+          ))}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
