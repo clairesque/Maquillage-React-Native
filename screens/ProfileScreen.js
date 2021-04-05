@@ -50,7 +50,7 @@ const ProfileScreen = ({navigation, route}) => {
           style={styles.userImg}
           source={{uri: userData ? userData.userImg || '/Users/apple/Developer/maquillage/assets/user_icon.png' : '/Users/apple/Developer/maquillage/assets/user_icon.png'}}
         />
-        <Text style={styles.userName}>{userData ? userData.name || 'Test User' : 'Test User'}</Text>
+        <Text style={styles.userName}>{userData ? userData.name || '' : ''}</Text>
         {/* <Text>{route.params ? route.params.userId : user.uid}</Text> */}
         <Text style={styles.aboutUser}>
         {userData ? userData.about || 'No details added.' : ''}

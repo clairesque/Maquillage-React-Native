@@ -15,7 +15,7 @@ import {SearchBar} from 'react-native-elements';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import colours from '../constants/colours';
-import filters from '../constants/filters';
+import { filtersAll } from '../constants/filters';
 import products from '../constants/products';
 
 const {width} = Dimensions.get('screen');
@@ -28,7 +28,6 @@ const HomeScreen = ({navigation}) => {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
-
   const Card = ({product}) => {
     return (
       <View style={styles.card}>
@@ -40,7 +39,9 @@ const HomeScreen = ({navigation}) => {
             <Image
               source={{uri: product.image_link}}
               style={{height: 120, width: 120}}
-              defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
+              defaultSource={{
+                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              }}
             />
           </View>
           <View style={{marginHorizontal: 20}}>
@@ -74,7 +75,7 @@ const HomeScreen = ({navigation}) => {
       </View>
     );
   };
-  
+
   const likeProduct = async (item) => {
     firestore()
       .collection('likes')
@@ -106,19 +107,6 @@ const HomeScreen = ({navigation}) => {
       });
   }, []);
 
-  const getByTags = (text) => {
-    var newData = [];
-    if (text) {
-      newData = filteredDataSource.filter(function (item) {
-        const tags = item.tag_list.toString();
-        const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
-        const textData = text.toLowerCase();
-        return searchName.indexOf(textData) > -1;
-      });
-    }
-    return newData;
-  };
-
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = masterDataSource.filter(function (item) {
@@ -138,17 +126,29 @@ const HomeScreen = ({navigation}) => {
       setSearch(text);
     }
   };
+
+  const filterFunction = (text, index) => {
+    setSelectedFilterIndex(index)
+    const newData = masterDataSource.filter(function (item) {
+      const tags = item.tag_list.toString();
+      const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
+      const textData = text.toLowerCase();
+      return searchName.indexOf(textData) > -1;
+    });
+    setFilteredDataSource(newData);
+  };
   const ListFilters = () => {
     return (
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.filterListContainer}>
-        {filters.map((filter, index) => (
+        {filtersAll.map((filter, index) => (
           <TouchableOpacity
             key={index}
             activeOpacity={0.8}
-            onPress={() => setSelectedFilterIndex(index)}>
+            onPress={() => filterFunction(filter.name, index)}
+          >
             <View
               style={{
                 backgroundColor:
