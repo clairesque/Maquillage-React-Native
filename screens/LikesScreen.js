@@ -13,7 +13,7 @@ import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../navigation/AuthProvider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-function LikesScreen(props, navigation) {
+function LikesScreen({navigation}) {
   const [entities, setEntities] = useState([]);
   const {user, logout} = useContext(AuthContext);
 
@@ -127,6 +127,12 @@ function LikesScreen(props, navigation) {
           }}>
           Likes
         </Text>
+        <TouchableOpacity onPress={()=> navigation.navigate('Recommendations')}>
+        <View flexDirection="row" style={{marginLeft: 100, marginTop:5}}>
+          <Text style={styles.recText}> Recommendations</Text>
+          <Icon name="chevron-right" size={25}/>
+          </View>
+          </TouchableOpacity>
       </View>
       {entities && (
         <View style={styles.listContainer}>

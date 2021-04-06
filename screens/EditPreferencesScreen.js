@@ -67,7 +67,7 @@ const EditPreferencesScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>About You</Text>
+      <Text style={styles.text}>Preferences</Text>
       <View style={styles.card}>
         <Text style={styles.question}>Age Range</Text>
         <Picker

@@ -22,7 +22,7 @@ const AuthStack = () => {
         AsyncStorage.setItem('alreadyLaunched', 'true'); 
         setIsFirstLaunch(true);
       } else {
-        setIsFirstLaunch(false);
+        setIsFirstLaunch(true);
       }
     });
   

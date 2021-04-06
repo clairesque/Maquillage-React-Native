@@ -33,17 +33,17 @@ const FeedStack = ({navigation}) => (
           shadowColor: '#fff',
           elevation: 0,
         },
-        headerRight: () => (
-          <View style={{marginRight: 10}}>
-            <FontAwesome5.Button
-              name="plus"
-              size={22}
-              backgroundColor="#fff"
-              color="#162F54"
-              onPress={() => navigation.navigate('Recommendations')}
-            />
-          </View>
-        ),
+        // headerRight: () => (
+        //   <View style={{marginRight: 10}}>
+        //     <FontAwesome5.Button
+        //       name="plus"
+        //       size={22}
+        //       backgroundColor="#fff"
+        //       color="#162F54"
+        //       onPress={() => navigation.navigate('Recommendations')}
+        //     />
+        //   </View>
+        // ),
       }}
     />
     <Stack.Screen

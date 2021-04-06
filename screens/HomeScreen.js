@@ -100,6 +100,8 @@ const HomeScreen = ({navigation}) => {
         userId: user.uid,
         brand: item.brand,
         name: item.name,
+        tag_list: item.tag_list,
+        description: item.description,
         image_link: item.image_link,
         status: 'liked',
       })
@@ -157,6 +159,7 @@ const HomeScreen = ({navigation}) => {
     });
     setFilteredDataSource(newData);
   };
+  
   const ListFilters = () => {
     return !loading ? (
       <ScrollView
@@ -247,7 +250,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   filterListContainer: {
-    paddingVertical: 30,
+    paddingVertical: 10,
     alignItems: 'center',
     paddingHorizontal: 10,
   },

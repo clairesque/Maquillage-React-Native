@@ -1,7 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import colours from '../constants/colours';
 
-
 export default StyleSheet.create({
   listContainer: {
     marginTop: 20,
@@ -20,6 +19,12 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  recText: {
+    fontSize: 15,
+    color: colours.tertiary,
+    fontWeight: 'bold',
+    paddingTop: 2
+  },
   addToCartBtn: {
     height: 30,
     width: 30,
@@ -28,6 +33,6 @@ export default StyleSheet.create({
     backgroundColor: colours.secondary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginStart: 55
+    marginStart: 55,
   },
 });
