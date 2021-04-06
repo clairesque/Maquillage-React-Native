@@ -13,7 +13,7 @@ import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {SearchBar} from 'react-native-elements';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import colours from '../constants/colours';
 import {filtersAll} from '../constants/filters';
 import products from '../constants/products';
@@ -82,7 +82,7 @@ const HomeScreen = ({navigation}) => {
           </Text>
           <View style={styles.addToCartBtn}>
             <Icon
-              name="heart"
+              name="favorite"
               size={15}
               color={colours.white}
               onPress={() => likeProduct(product)}
@@ -111,56 +111,52 @@ const HomeScreen = ({navigation}) => {
         console.log('Something went wrong with this.', error);
       });
   };
-  //REMOVE THIS TEMP
-  if (loading) {
-            setLoading(false);
-          }
-          //REMOVE THIS TEMP
-  // useEffect(() => {
-  //   fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
-  //     .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       setFilteredDataSource(responseJson);
-  //       setMasterDataSource(responseJson);
-  //       if (loading) {
-  //         setLoading(false);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
 
-  // const searchFilterFunction = (text) => {
-  //   if (text) {
-  //     const newData = masterDataSource.filter(function (item) {
-  //       const searchName = item.name
-  //         ? item.name.toLowerCase()
-  //         : ''.toLowerCase();
-  //       const searchBrand = item.brand
-  //         ? item.brand.toLowerCase()
-  //         : ''.toLowerCase();
-  //       const textData = text.toLowerCase();
-  //       return (searchName + searchBrand).indexOf(textData) > -1;
-  //     });
-  //     setFilteredDataSource(newData);
-  //     setSearch(text);
-  //   } else {
-  //     setFilteredDataSource(masterDataSource);
-  //     setSearch(text);
-  //   }
-  // };
+  useEffect(() => {
+    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setFilteredDataSource(responseJson);
+        setMasterDataSource(responseJson);
+        if (loading) {
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
-  // const filterFunction = (text, index) => {
-  //   setSelectedFilterIndex(index);
-  //   const newData = masterDataSource.filter(function (item) {
-  //     const tags = item.tag_list.toString();
-  //     const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
-  //     const textData = text.toLowerCase();
-  //     return searchName.indexOf(textData) > -1;
-  //   });
-  //   setFilteredDataSource(newData);
-  // };
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = masterDataSource.filter(function (item) {
+        const searchName = item.name
+          ? item.name.toLowerCase()
+          : ''.toLowerCase();
+        const searchBrand = item.brand
+          ? item.brand.toLowerCase()
+          : ''.toLowerCase();
+        const textData = text.toLowerCase();
+        return (searchName + searchBrand).indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      setSearch(text);
+    } else {
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
+
+  const filterFunction = (text, index) => {
+    setSelectedFilterIndex(index);
+    const newData = masterDataSource.filter(function (item) {
+      const tags = item.tag_list.toString();
+      const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
+      const textData = text.toLowerCase();
+      return searchName.indexOf(textData) > -1;
+    });
+    setFilteredDataSource(newData);
+  };
   const ListFilters = () => {
     return !loading ? (
       <ScrollView
@@ -233,7 +229,7 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={products}
+          data={filteredDataSource}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}

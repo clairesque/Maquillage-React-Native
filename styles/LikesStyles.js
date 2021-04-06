@@ -7,7 +7,7 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   card: {
-    height: 225,
+    height: 210,
     backgroundColor: colours.white,
     width: 180,
     marginHorizontal: 5,

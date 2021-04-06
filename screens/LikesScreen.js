@@ -24,10 +24,7 @@ function LikesScreen(props, navigation) {
       .update({
         status: 'unliked',
       })
-      .then(() => {
-        console.log('unliked');
-        Alert.alert('You have unliked this product!');
-      });
+      .then(() => {});
   };
   const Card = ({product}) => {
     return (
@@ -42,12 +39,14 @@ function LikesScreen(props, navigation) {
             }}>
             <Image
               source={{uri: product.image_link}}
-              defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
+              defaultSource={{
+                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              }}
               style={{width: 130, height: 105}}
             />
           </View>
 
-          <Text style={{fontWeight: 'bold', fontSize: 15, marginTop: 40}}>
+          <Text style={{fontWeight: 'bold', fontSize: 15, marginTop: 45}}>
             {product.name}
           </Text>
           <View
@@ -56,24 +55,34 @@ function LikesScreen(props, navigation) {
               justifyContent: 'space-between',
               marginTop: 5,
             }}>
-            <Text style={{fontSize: 19}}>{product.brand}</Text>
+            <Text style={{fontSize: 16}}>{product.brand}</Text>
             <View
               style={{
-                height: 30,
-                width: 30,
-                backgroundColor: product.like
-                  ? 'rgba(0,0,0,0.2)'
-                  : colours.primary, //'rgba(245, 42, 42,0.2)'
-                borderRadius: 20,
+                height: 28,
+                width: 28,
+                borderColor: colours.primary,
+                borderWidth: 1,
+                borderRadius: 10,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Icon
-                name="favorite"
-                size={18}
-                color={product.like ? colours.black : colours.white}
-                onPress={() => unlikeProduct(product.id)}
-              />
+              {
+                (!product.liked=='liked' ? (
+                  <Icon
+                    name="favorite-border"
+                    color={colours.white}
+                    size={18}
+                    onPress={() => unlikeProduct(product.id)}
+                  />
+                ) : (
+                  <Icon
+                    name="favorite"
+                    color={colours.primary}
+                    size={18}
+                    onPress={() => unlikeProduct(product.id)}
+                  />
+                ))
+              }
             </View>
           </View>
         </View>
@@ -134,4 +143,4 @@ function LikesScreen(props, navigation) {
     </SafeAreaView>
   );
 }
-export default LikesScreen
+export default LikesScreen;
