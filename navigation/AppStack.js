@@ -11,7 +11,9 @@ import LikesScreen from '../screens/LikesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RecommendationsScreen from '../screens/RecommendationsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import EditPreferencesScreen from '../screens/EditPreferencesScreen';
 import ProductScreen from '../screens/ProductScreen';
+import colours from '../constants/colours';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +50,7 @@ const FeedStack = ({navigation}) => (
       name="Recommendations"
       component={RecommendationsScreen}
       options={{
-        title: '',
+        title: 'Recommendations',
         headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: '#162F5415',
@@ -80,6 +82,13 @@ const FeedStack = ({navigation}) => (
             <Ionicons name="arrow-back" size={25} color="#162F54" />
           </View>
         ),
+      }}
+    />
+    <Stack.Screen
+      name="EditPreferences"
+      component={EditPreferencesScreen}
+      options={{
+        headerShown: false
       }}
     />
     <Stack.Screen
@@ -122,7 +131,11 @@ const ProfileStack = ({navigation}) => (
       name="Profile"
       component={ProfileScreen}
       options={{
-        headerShown: false,
+        title: 'My Profile',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: colours.secondary,
+        },
       }}
     />
     <Stack.Screen
@@ -139,6 +152,13 @@ const ProfileStack = ({navigation}) => (
         },
       }}
     />
+    {/* <Stack.Screen
+      name="EditPreferences"
+      component={EditPreferencesScreen}
+      options={{
+        headerShown: false
+      }}
+    /> */}
   </Stack.Navigator>
 );
 
@@ -207,3 +227,4 @@ const AppStack = () => {
 };
 
 export default AppStack;
+

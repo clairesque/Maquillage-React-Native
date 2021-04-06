@@ -12,7 +12,6 @@ import {AuthContext} from '../navigation/AuthProvider';
 import colours from '../constants/colours';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import { Icon } from 'react-native-eva-icons';
 
 const ProfileScreen = ({navigation, route}) => {
   const {user, logout} = useContext(AuthContext);
