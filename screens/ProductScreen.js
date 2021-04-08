@@ -16,16 +16,20 @@ const ProductScreen = ({navigation, route}) => {
     }
   }
   function splitDescription(desc) {
-    if (desc.includes(',') && !desc.includes('.')) {
-      const parts = desc.split(',');
-      const firstThree = parts.slice(0, 1);
-      filteredDescription = firstThree.join(',');
+    if (desc.length <= 300) {
+      filteredDescription = desc.repeat(2);
     } else {
-      description = desc.split('.');
-      filteredDescription = description
-        .slice(0, 1)
-        .join('.')
-        .replace(/([^.])$/, '$1.');
+      if (desc.includes(',') && !desc.includes('.')) {
+        const parts = desc.split(',');
+        const firstThree = parts.slice(0, 3);
+        filteredDescription = firstThree.join(',');
+      } else {
+        description = desc.split('.');
+        filteredDescription = description
+          .slice(0, 3)
+          .join('.')
+          .replace(/([^.])$/, '$1.');
+      }
     }
     return filteredDescription;
   }
@@ -40,12 +44,12 @@ const ProductScreen = ({navigation, route}) => {
   }
 
   return (
-    <SafeAreaView style={{backgroundColor: colours.white}}>
+    <SafeAreaView style={{backgroundColor: colours.white, height: 750}}>
       <View
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          height: 280,
+          height: 200,
         }}>
         <Image
           source={{uri: item.image_link}}
@@ -53,8 +57,9 @@ const ProductScreen = ({navigation, route}) => {
             uri: '/Users/apple/Developer/maquillage/assets/logo.png',
           }}
           style={{
-            width: '50%',
-            height: '70%',
+            width: '45%',
+            height: '90%',
+            bottom: 10,
             borderRadius: 100,
           }}
         />
@@ -66,7 +71,7 @@ const ProductScreen = ({navigation, route}) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{marginHorizontal: 10}}>
+          <View style={{marginHorizontal: 3}}>
             <Text
               style={{
                 fontSize: 25,
@@ -81,47 +86,54 @@ const ProductScreen = ({navigation, route}) => {
             </Text>
           </View>
           <View style={style.iconContainer}>
-            <Icon name="favorite-border" color={colours.primary} size={25} />
+            <Icon name="favorite-border" color={colours.white} size={25} />
           </View>
         </View>
         <Text style={style.detailsText}>
           {splitDescription(item.description)}
         </Text>
-        <Text style={style.tags}>Colours:</Text>
         <View
           style={{
-            flexDirection: 'row',
-            ...style.colours,
+            position: 'absolute',
+            top: 340,
+            left: 20,
           }}>
-          {item.product_colors.map((colour, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: colour.hex_value,
-                ...style.colourBtn,
-              }}></View>
-          ))}
-        </View>
-        {toggleText(item.tag_list)}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {item.tag_list.map((filter, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: colours.secondary,
-                ...style.filterBtn,
-              }}>
-              <Text
+          <Text style={style.tags}>Colours:</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              ...style.colours,
+            }}>
+            {item.product_colors.map((colour, index) => (
+              <View
+                key={index}
                 style={{
-                  fontSize: 13,
-                  fontWeight: 'bold',
-                  color: colours.tertiary,
+                  backgroundColor: colour.hex_value,
+                  ...style.colourBtn,
+                }}></View>
+            ))}
+          </View>
+          {toggleText(item.tag_list)}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {item.tag_list.map((filter, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: colours.secondary,
+                  ...style.filterBtn,
                 }}>
-                {filter}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 'bold',
+                    color: colours.tertiary,
+                  }}>
+                  {filter}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -138,12 +150,11 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     paddingBottom: 200,
-    backgroundColor: colours.primary,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,
   },
   iconContainer: {
-    backgroundColor: colours.white,
+    backgroundColor: colours.primary,
     height: 50,
     width: 50,
     justifyContent: 'center',
@@ -151,17 +162,18 @@ const style = StyleSheet.create({
     borderRadius: 30,
   },
   detailsText: {
-    marginTop: 50,
-    lineHeight: 22,
+    lineHeight: 20,
     fontSize: 15,
-    color: colours.white,
+    marginTop: 45,
+    color: colours.tertiary,
+    width: 370,
   },
   tags: {
     marginTop: 20,
     lineHeight: 22,
     fontSize: 15,
     fontWeight: 'bold',
-    color: colours.white,
+    color: colours.tertiary,
   },
   filterBtn: {
     marginTop: 10,
@@ -173,12 +185,11 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  colours: {},
   colourBtn: {
     marginTop: 10,
-    height: 20,
-    width: 20,
-    marginRight: 9,
+    height: 30,
+    width: 30,
+    marginRight: 5,
     borderRadius: 60,
     alignItems: 'center',
     flexDirection: 'row',
