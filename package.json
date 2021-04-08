@@ -12,6 +12,7 @@
   "dependencies": {
     "@paraboly/react-native-card": "^1.0.3",
     "@react-native-community/async-storage": "^1.12.0",
+    "@react-native-community/cli-platform-ios": "^3.0.0",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/picker": "^1.8.1",
@@ -46,7 +47,6 @@
     "react-native-screens": "^2.10.1",
     "react-native-skeleton-placeholder": "^3.0.4",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-vector-icons": "^7.1.0",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "styled-components": "^5.2.0"
   },

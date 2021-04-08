@@ -26,7 +26,7 @@ const HomeScreen = ({navigation}) => {
   const {user, logout} = useContext(AuthContext);
   const [search, setSearch] = useState('');
   const [like, setLike] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
@@ -63,7 +63,9 @@ const HomeScreen = ({navigation}) => {
                 fontWeight: 'bold',
                 textTransform: 'capitalize',
               }}>
-              {product.name && product.brand ? splitProduct(product.name, product.brand) : product.name}
+              {product.name && product.brand
+                ? splitProduct(product.name, product.brand)
+                : product.name}
             </Text>
             <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
               {product.brand}
@@ -159,7 +161,7 @@ const HomeScreen = ({navigation}) => {
     });
     setFilteredDataSource(newData);
   };
-  
+
   const ListFilters = () => {
     return !loading ? (
       <ScrollView
@@ -232,7 +234,7 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={filteredDataSource}
+          data={products}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}

@@ -15,8 +15,7 @@ export const filtersAll = [
   {id: '2', name: 'Organic'},
   {id: '3', name: 'Natural'},
   {id: '4', name: 'Alcohol free'},
-  {id: '5', name: 'Hypoallergenic'},
-  {id: '6', name: 'Dairy free'},
+  {id: '5', name: 'Dairy free'},
 ];
 
 export default filters;

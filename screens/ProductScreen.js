@@ -9,25 +9,23 @@ const ProductScreen = ({navigation, route}) => {
 
   function splitProduct(name, brand) {
     if (name.toLowerCase().includes(brand.toLowerCase())) {
-      filteredName = name.toLowerCase().replace(brand+' ', '')
+      filteredName = name.toLowerCase().replace(brand + ' ', '');
       return filteredName;
-    }
-    else {
+    } else {
       return name;
     }
   }
   function splitDescription(desc) {
     if (desc.includes(',') && !desc.includes('.')) {
       const parts = desc.split(',');
-      const firstThree = parts.slice(0, 3);
+      const firstThree = parts.slice(0, 1);
       filteredDescription = firstThree.join(',');
-    }
-    else {
-    description = desc.split('.');
-    filteredDescription = description
-      .slice(0, 2)
-      .join('.')
-      .replace(/([^.])$/, '$1.');
+    } else {
+      description = desc.split('.');
+      filteredDescription = description
+        .slice(0, 1)
+        .join('.')
+        .replace(/([^.])$/, '$1.');
     }
     return filteredDescription;
   }
@@ -36,7 +34,7 @@ const ProductScreen = ({navigation, route}) => {
     if (item.length === 0) {
       tagText = null;
     } else {
-      tagText = <Text style={style.tags}>{'#tags:'}</Text>;
+      tagText = <Text style={style.tags}>{'Tags:'}</Text>;
     }
     return tagText;
   }
@@ -55,10 +53,9 @@ const ProductScreen = ({navigation, route}) => {
             uri: '/Users/apple/Developer/maquillage/assets/logo.png',
           }}
           style={{
-            width: '100%',
-            height: undefined,
-            aspectRatio: 1,
-            resizeMode: 'contain',
+            width: '50%',
+            height: '70%',
+            borderRadius: 100,
           }}
         />
       </View>
@@ -75,7 +72,7 @@ const ProductScreen = ({navigation, route}) => {
                 fontSize: 25,
                 fontWeight: 'bold',
                 color: colours.tertiary,
-                textTransform: 'capitalize'
+                textTransform: 'capitalize',
               }}>
               {splitProduct(item.name, item.brand)}
             </Text>
@@ -90,6 +87,21 @@ const ProductScreen = ({navigation, route}) => {
         <Text style={style.detailsText}>
           {splitDescription(item.description)}
         </Text>
+        <Text style={style.tags}>Colours:</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            ...style.colours,
+          }}>
+          {item.product_colors.map((colour, index) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor: colour.hex_value,
+                ...style.colourBtn,
+              }}></View>
+          ))}
+        </View>
         {toggleText(item.tag_list)}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {item.tag_list.map((filter, index) => (
@@ -157,6 +169,17 @@ const style = StyleSheet.create({
     width: 90,
     marginRight: 9,
     borderRadius: 30,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  colours: {},
+  colourBtn: {
+    marginTop: 10,
+    height: 20,
+    width: 20,
+    marginRight: 9,
+    borderRadius: 60,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
