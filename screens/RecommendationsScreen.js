@@ -9,6 +9,7 @@ import SliderEntry from '../components/SliderEntry';
 import products from '../constants/products';
 import {AuthContext} from '../navigation/AuthProvider';
 import {ActivityIndicator} from 'react-native-paper';
+import {ScrollView} from 'react-native';
 
 const RecommendationsScreen = ({navigation}) => {
   const SLIDER_1_FIRST_ITEM = 1;
@@ -20,25 +21,20 @@ const RecommendationsScreen = ({navigation}) => {
   const [types, setTypes] = useState([
     {ageRange: '', allergy: true, category: '', email: '', skinType: ''},
   ]);
-  const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   useEffect(() => {
-    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+    fetch('http://makeup-api.herokuapp.com/api/v1/products.json/')
       .then((response) => response.json())
       .then((responseJson) => {
         if (loading) {
           setLoading(false);
         }
-        setFilteredDataSource(responseJson);
         setMasterDataSource(responseJson);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-
-  useEffect(() => {
     firestore()
       .collection('preferences')
       .where('email', '==', user.email)
@@ -58,6 +54,10 @@ const RecommendationsScreen = ({navigation}) => {
   }, []);
 
   // useEffect(() => {
+
+  // }, []);
+
+  // useEffect(() => {
   //   getTypes();
   //   navigation.addListener('focus', () => setLoading(!loading));
   // }, [navigation, loading]);
@@ -65,7 +65,7 @@ const RecommendationsScreen = ({navigation}) => {
   getByDescription = (text) => {
     var newData = [];
     if (text) {
-      newData = filteredDataSource.filter(function (item) {
+      newData = masterDataSource.filter(function (item) {
         const searchName = item.description
           ? item.description.toLowerCase()
           : ''.toLowerCase();
@@ -79,7 +79,7 @@ const RecommendationsScreen = ({navigation}) => {
   getByTags = (text) => {
     var newData = [];
     if (text) {
-      newData = filteredDataSource.filter(function (item) {
+      newData = masterDataSource.filter(function (item) {
         const tags = item.tag_list.toString();
         const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
         const textData = text.toLowerCase();
@@ -101,17 +101,17 @@ const RecommendationsScreen = ({navigation}) => {
       />
     );
   };
-  defaultSlider = (number, skinType, filteredDataSource) => {
+  defaultSlider = (number, skinType, masterDataSource) => {
     return (
       <View style={styles.exampleContainer}>
-        <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text>
-        <Text style={styles.subtitle}>
+        {/* <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text> */}
+        <Text style={styles.titleDefault}>
           Since you have <Text style={{fontWeight: 'bold'}}>{skinType}</Text>{' '}
           skin...
         </Text>
         <Carousel
           ref={(c) => (this._slider1Ref = c)}
-          data={filteredDataSource}
+          data={masterDataSource}
           renderItem={this._renderItemWithParallax}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -121,30 +121,30 @@ const RecommendationsScreen = ({navigation}) => {
           inactiveSlideOpacity={0.7}
           containerCustomStyle={styles.slider}
           contentContainerCustomStyle={styles.sliderContentContainer}
-          loop={true}
-          loopClonesPerSide={2}
-          autoplay={true}
-          autoplayDelay={500}
-          autoplayInterval={3000}
+          // loop={true}
+          // loopClonesPerSide={2}
+          // autoplay={true}
+          // autoplayDelay={500}
+          // autoplayInterval={3000}
           onSnapToItem={(index) => setSlider({index})}
         />
       </View>
     );
   };
-  layout = (number, productType, filteredDataSource) => {
+  layout = (number, productType, masterDataSource) => {
     return (
       <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
-        <Text
+        {/* <Text
           style={[
             styles.title,
             styles.titleDark,
-          ]}>{`Recommendation ${number}`}</Text>
+          ]}>{`Recommendation ${number}`}</Text> */}
         <Text style={[styles.subtitle]}>
           Few <Text style={{fontWeight: 'bold'}}>{productType}</Text> products
           for you...
         </Text>
         <Carousel
-          data={filteredDataSource}
+          data={masterDataSource}
           renderItem={this._renderItem}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -156,21 +156,52 @@ const RecommendationsScreen = ({navigation}) => {
       </View>
     );
   };
-
+  allergySlider = (masterDataSource) => {
+    return (
+      <View style={styles.exampleContainer}>
+        {/* <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text> */}
+        <Text style={styles.titleDefault}>
+          For <Text style={{fontWeight: 'bold'}}>skin allergies...</Text>
+        </Text>
+        <Carousel
+          ref={(c) => (this._slider1Ref = c)}
+          data={masterDataSource}
+          renderItem={this._renderItemWithParallax}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          hasParallaxImages={true}
+          firstItem={SLIDER_1_FIRST_ITEM}
+          inactiveSlideScale={0.94}
+          inactiveSlideOpacity={0.7}
+          containerCustomStyle={styles.slider}
+          contentContainerCustomStyle={styles.sliderContentContainer}
+          // loop={true}
+          // loopClonesPerSide={2}
+          // autoplay={true}
+          // autoplayDelay={500}
+          // autoplayInterval={3000}
+          onSnapToItem={(index) => setSlider({index})}
+        />
+      </View>
+    );
+  };
   const skinType = types[0].skinType.toLowerCase();
   const productType = types[0].category.toLowerCase();
+  const allergy = types[0].allergy;
 
   var skinRecommender = defaultSlider(1, skinType, getByDescription(skinType));
   var typeRecommender = layout(2, productType, getByTags(productType));
+  var allergyRecommender = allergySlider(getByTags('hypoallergenic'));
 
   return !loading ? (
-    <View
+    <ScrollView
       style={style.container}
       scrollEventThrottle={200}
       directionalLockEnabled={true}>
       {skinRecommender}
       {typeRecommender}
-    </View>
+      {allergy ? allergyRecommender : null}
+    </ScrollView>
   ) : (
     <View style={styles.containerActivity}>
       <ActivityIndicator
@@ -191,7 +222,7 @@ const style = StyleSheet.create({
   },
   containerActivity: {
     height: 700,
-    backgroundColor: colours.secondary
+    backgroundColor: colours.secondary,
   },
   activityIndicator: {
     paddingTop: 100,
