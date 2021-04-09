@@ -10,11 +10,23 @@ import {Dimensions} from 'react-native';
 
 class ReviewsScreen extends React.Component {
   state = {
-    isModalVisible: true,
+    isModalVisible: false,
   };
 
   toggleModal() {
     this.setState({isModalVisible: !this.state.isModalVisible});
+  }
+
+  componentDidMount() {
+    if (this.props.route.params) {
+      this.setState({
+        isModalVisible: true,
+      });
+    } else {
+      this.setState({
+        isModalVisible: false,
+      });
+    }
   }
 
   render() {

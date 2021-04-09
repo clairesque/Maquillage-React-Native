@@ -16,6 +16,7 @@ const ProductScreen = ({navigation, route}) => {
     }
   }
   function splitDescription(desc) {
+    item.modal = true;
     if (desc.length <= 250) {
       filteredDescription = desc.repeat(2);
     } else {
