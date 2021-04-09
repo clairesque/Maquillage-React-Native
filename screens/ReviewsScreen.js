@@ -2,15 +2,18 @@ import React, {Component} from 'react';
 import {Modal} from 'react-native';
 import {KeyboardAvoidingView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import ReviewsModal from '../components/ReviewsModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colours from '../constants/colours';
 import {Dimensions} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 class ReviewsScreen extends React.Component {
   state = {
     isModalVisible: false,
+    review: '',
+    item: this.props.route.params,
   };
 
   toggleModal() {
@@ -18,7 +21,7 @@ class ReviewsScreen extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.route.params) {
+    if (this.state.item) {
       this.setState({
         isModalVisible: true,
       });
@@ -27,6 +30,29 @@ class ReviewsScreen extends React.Component {
         isModalVisible: false,
       });
     }
+  }
+
+  addReview() {
+    firestore()
+      .collection('reviews')
+      .add({
+        userEmail: this.state.item.user.email,
+        brand: this.state.item.brand,
+        name: this.state.item.name,
+        tag_list: this.state.item.tag_list,
+        product_colors: this.state.item.product_colors,
+        description: this.state.item.description,
+        image_link: this.state.item.image_link,
+        review: this.state.review,
+      })
+      .then(() => {
+        this.setState({
+          isModalVisible: false,
+        });
+      })
+      .catch((error) => {
+        console.log('Something went wrong with this.');
+      });
   }
 
   render() {
@@ -66,12 +92,18 @@ class ReviewsScreen extends React.Component {
                 <View style={{alignSelf: 'stretch', marginHorizontal: 32}}>
                   <Text style={styles.title}> What's your review? </Text>
                   <TextInput
+                    value={this.state.review}
+                    onChangeText={(text) => this.setState({review: text})}
                     style={styles.input}
+                    autoCapitalize="none"
+                    labelValue={this.state.review}
                     placeholder="Your review..."
                   />
                 </View>
 
-                <TouchableOpacity style={styles.add}>
+                <TouchableOpacity
+                  style={styles.add}
+                  onPress={() => this.addReview()}>
                   <Text style={{color: colours.white, fontWeight: '600'}}>
                     Add
                   </Text>

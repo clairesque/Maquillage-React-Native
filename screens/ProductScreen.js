@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, Image} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colours from '../constants/colours';
+import {AuthContext} from '../navigation/AuthProvider';
 
 const ProductScreen = ({navigation, route}) => {
+  const {user, logout} = useContext(AuthContext);
+
   const item = route.params;
 
   function splitProduct(name, brand) {
@@ -17,6 +20,7 @@ const ProductScreen = ({navigation, route}) => {
   }
   function splitDescription(desc) {
     item.modal = true;
+    item.user = user;
     if (desc.length <= 250) {
       filteredDescription = desc.repeat(2);
     } else {
