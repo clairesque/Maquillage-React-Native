@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View, Text, Image} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colours from '../constants/colours';
 
@@ -24,8 +24,8 @@ const ProductScreen = ({navigation, route}) => {
         const firstThree = parts.slice(0, 3);
         filteredDescription = firstThree.join(',');
       } else if (desc.includes(',')) {
-        const parts = desc.split(',');
-        const firstThree = parts.slice(0, 3);
+        const parts = desc.split('.');
+        const firstThree = parts.slice(0, 5);
         filteredDescription = firstThree.join(',');
       } else {
         description = desc.split('.');
@@ -85,9 +85,36 @@ const ProductScreen = ({navigation, route}) => {
               }}>
               {splitProduct(item.name, item.brand)}
             </Text>
-            <Text style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
-              {item.brand}
-            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text
+                style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
+                {item.brand}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  left: 7,
+                  top: 7,
+                  color: '#0000FF',
+                  fontStyle: 'italic',
+                }}>
+                Follow ||
+              </Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Reviews', item)}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    left: 7,
+                    top: 7,
+                    color: '#0000FF',
+                    fontStyle: 'italic',
+                  }}>
+                  {' '}
+                  Add a Review
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={style.iconContainer}>
             <Icon name="favorite-border" color={colours.white} size={25} />
@@ -119,26 +146,34 @@ const ProductScreen = ({navigation, route}) => {
               ))}
             </View>
           </ScrollView>
-          {toggleText(item.tag_list, 'Tags:')}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {item.tag_list.map((filter, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: colours.secondary,
-                  ...style.filterBtn,
-                }}>
-                <Text
+          <Text style={style.tags}>Tags:</Text>
+          {item.tag_list.length ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {item.tag_list.map((filter, index) => (
+                <View
+                  key={index}
                   style={{
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colours.tertiary,
+                    backgroundColor: colours.secondary,
+                    ...style.filterBtn,
                   }}>
-                  {filter}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 'bold',
+                      color: colours.tertiary,
+                    }}>
+                    {filter}
+                  </Text>
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text
+              style={{color: colours.tertiary, fontSize: 15, right: 3, top: 5}}>
+              {' '}
+              No tags available for this product.{' '}
+            </Text>
+          )}
         </View>
       </View>
     </SafeAreaView>
