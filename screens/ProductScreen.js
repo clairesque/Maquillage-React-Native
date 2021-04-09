@@ -16,10 +16,14 @@ const ProductScreen = ({navigation, route}) => {
     }
   }
   function splitDescription(desc) {
-    if (desc.length <= 300) {
+    if (desc.length <= 250) {
       filteredDescription = desc.repeat(2);
     } else {
       if (desc.includes(',') && !desc.includes('.')) {
+        const parts = desc.split(',');
+        const firstThree = parts.slice(0, 3);
+        filteredDescription = firstThree.join(',');
+      } else if (desc.includes(',')) {
         const parts = desc.split(',');
         const firstThree = parts.slice(0, 3);
         filteredDescription = firstThree.join(',');
@@ -34,11 +38,11 @@ const ProductScreen = ({navigation, route}) => {
     return filteredDescription;
   }
 
-  function toggleText(item) {
+  function toggleText(item, text) {
     if (item.length === 0) {
       tagText = null;
     } else {
-      tagText = <Text style={style.tags}>{'Tags:'}</Text>;
+      tagText = <Text style={style.tags}>{text}</Text>;
     }
     return tagText;
   }
@@ -98,22 +102,24 @@ const ProductScreen = ({navigation, route}) => {
             top: 340,
             left: 20,
           }}>
-          <Text style={style.tags}>Colours:</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              ...style.colours,
-            }}>
-            {item.product_colors.map((colour, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: colour.hex_value,
-                  ...style.colourBtn,
-                }}></View>
-            ))}
-          </View>
-          {toggleText(item.tag_list)}
+          {toggleText(item.product_colors, 'Colours:')}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View
+              style={{
+                flexDirection: 'row',
+                ...style.colours,
+              }}>
+              {item.product_colors.map((colour, index) => (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: colour.hex_value,
+                    ...style.colourBtn,
+                  }}></View>
+              ))}
+            </View>
+          </ScrollView>
+          {toggleText(item.tag_list, 'Tags:')}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {item.tag_list.map((filter, index) => (
               <View
@@ -124,7 +130,7 @@ const ProductScreen = ({navigation, route}) => {
                 }}>
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontSize: 11,
                     fontWeight: 'bold',
                     color: colours.tertiary,
                   }}>
