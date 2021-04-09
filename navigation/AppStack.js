@@ -13,6 +13,7 @@ import RecommendationsScreen from '../screens/RecommendationsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import EditPreferencesScreen from '../screens/EditPreferencesScreen';
 import ProductScreen from '../screens/ProductScreen';
+import ReviewsScreen from '../screens/ReviewsScreen';
 import colours from '../constants/colours';
 
 const Stack = createStackNavigator();
@@ -88,12 +89,31 @@ const FeedStack = ({navigation}) => (
       name="EditPreferences"
       component={EditPreferencesScreen}
       options={{
-        headerShown: false
+        headerShown: false,
       }}
     />
     <Stack.Screen
       name="ProductScreen"
       component={ProductScreen}
+      options={{
+        title: '',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+        headerBackTitleVisible: false,
+        headerBackImage: () => (
+          <View style={{marginLeft: 15}}>
+            <Ionicons name="arrow-back" size={25} color="#162F54" />
+          </View>
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="Reviews"
+      component={ReviewsScreen}
       options={{
         title: '',
         headerTitleAlign: 'center',
@@ -118,6 +138,18 @@ const LikesStack = ({navigation}) => (
     <Stack.Screen
       name="For You"
       component={LikesScreen}
+      options={{
+        headerShown: true,
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const ReviewsStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Reviews"
+      component={ReviewsScreen}
       options={{
         headerShown: true,
       }}
@@ -184,7 +216,6 @@ const AppStack = () => {
         component={FeedStack}
         options={({route}) => ({
           tabBarLabel: 'Home',
-          // tabBarVisible: route.state && route.state.index === 0,
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons
               name="home-outline"
@@ -199,16 +230,18 @@ const AppStack = () => {
         component={LikesStack}
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
-          // Or Hide tabbar when push!
-          // https://github.com/react-navigation/react-navigation/issues/7677
-          // tabBarVisible: route.state && route.state.index === 0,
-          // tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
-            <Ionicons
-              name="heart"
-              color={color}
-              size={size}
-            />
+            <Ionicons name="heart" color={color} size={size} />
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="Reviews"
+        component={ReviewsStack}
+        options={({route}) => ({
+          tabBarVisible: getTabBarVisibility(route),
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name="star" color={color} size={size} />
           ),
         })}
       />
@@ -216,7 +249,6 @@ const AppStack = () => {
         name="Profile"
         component={ProfileStack}
         options={{
-          // tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),
@@ -227,4 +259,3 @@ const AppStack = () => {
 };
 
 export default AppStack;
-

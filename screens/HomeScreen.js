@@ -103,6 +103,7 @@ const HomeScreen = ({navigation}) => {
         brand: item.brand,
         name: item.name,
         tag_list: item.tag_list,
+        product_colors: item.product_colors,
         description: item.description,
         image_link: item.image_link,
         status: 'liked',

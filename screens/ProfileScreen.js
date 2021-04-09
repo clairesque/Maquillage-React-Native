@@ -92,7 +92,9 @@ const ProfileScreen = ({navigation, route}) => {
         <Text style={styles.defaultAge}>
           {userData ? userData.phone || '18-24 years old' : '18-24 years old'}
         </Text>
-        <TouchableOpacity style={styles.logout} onPress={() => navigation.navigate('EditPreferences')}>
+        <TouchableOpacity
+          style={styles.logout}
+          onPress={() => navigation.navigate('EditPreferences')}>
           <View style={{marginLeft: 26, flexDirection: 'row'}}>
             <Icon
               name="heart"
