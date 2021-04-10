@@ -95,7 +95,7 @@ const ProductScreen = ({navigation, route}) => {
                 style={{fontSize: 20, marginTop: 2, color: colours.tertiary}}>
                 {item.brand}
               </Text>
-              <Text
+              {/* <Text
                 style={{
                   fontSize: 15,
                   left: 7,
@@ -104,19 +104,19 @@ const ProductScreen = ({navigation, route}) => {
                   fontStyle: 'italic',
                 }}>
                 Follow ||
-              </Text>
+              </Text> */}
               <TouchableOpacity
                 onPress={() => navigation.navigate('Reviews', item)}>
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 17,
                     left: 7,
-                    top: 7,
+                    top: 4,
                     color: '#0000FF',
-                    fontStyle: 'italic',
+                    textDecorationLine: 'underline',
                   }}>
                   {' '}
-                  Add a Review
+                  Add a review
                 </Text>
               </TouchableOpacity>
             </View>

@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-native';
-import {KeyboardAvoidingView} from 'react-native';
-import {TouchableOpacity} from 'react-native';
-import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  FlatList,
+} from 'react-native';
 import ReviewsModal from '../components/ReviewsModal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colours from '../constants/colours';
-import {Dimensions} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
 class ReviewsScreen extends React.Component {
@@ -14,13 +19,18 @@ class ReviewsScreen extends React.Component {
     isModalVisible: false,
     review: '',
     item: this.props.route.params,
+    reviews: [],
+    username: '',
   };
 
   toggleModal() {
     this.setState({isModalVisible: !this.state.isModalVisible});
   }
 
+  reviewsDb = firestore().collection('reviews');
+
   componentDidMount() {
+    // toggle modal
     if (this.state.item) {
       this.setState({
         isModalVisible: true,
@@ -30,20 +40,77 @@ class ReviewsScreen extends React.Component {
         isModalVisible: false,
       });
     }
+
+    // get values from collection
+    this.reviewsDb
+      .get()
+      .then((snapshot) => {
+        const allReviews = [];
+        snapshot.forEach((doc) => {
+          const like = doc.data();
+          like.id = doc.id;
+          allReviews.push(like);
+        }),
+          this.setState({
+            reviews: allReviews,
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // get user's name using their email
+    if (this.state.item) {
+      firestore()
+        .collection('users')
+        .where('email', '==', this.props.route.params.user.email)
+        .onSnapshot((querySnapshot) => {
+          var name = '';
+          querySnapshot.forEach((doc) => {
+            name = doc._data['name'];
+            console.log('this is in get name', name);
+          });
+          this.setState({
+            username: name,
+          });
+        });
+    }
+  }
+
+  checkReviews(productName) {
+    firestore()
+      .collection('reviews')
+      .where('name', '==', productName)
+      .onSnapshot(
+        (querySnapshot) => {
+          if (querySnapshot['_docs'].length == 0) {
+            this.addReview();
+          } else {
+            console.log('Document exists');
+            querySnapshot.forEach((doc) => {
+              this.updateReview(doc.id);
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   }
 
   addReview() {
+    username = this.state.username;
+    console.log('this is in add review', this.state.username);
     firestore()
       .collection('reviews')
       .add({
-        userEmail: this.state.item.user.email,
         brand: this.state.item.brand,
         name: this.state.item.name,
         tag_list: this.state.item.tag_list,
         product_colors: this.state.item.product_colors,
         description: this.state.item.description,
         image_link: this.state.item.image_link,
-        review: this.state.review,
+        review: [{name: username, review: this.state.review}],
       })
       .then(() => {
         this.setState({
@@ -52,6 +119,21 @@ class ReviewsScreen extends React.Component {
       })
       .catch((error) => {
         console.log('Something went wrong with this.');
+      });
+  }
+
+  updateReview(id) {
+    newReview = {name: this.state.username, review: this.state.review};
+    firestore()
+      .collection('reviews')
+      .doc(id)
+      .update({
+        review: firestore.FieldValue.arrayUnion(newReview),
+      })
+      .then(() => {
+        this.setState({
+          isModalVisible: false,
+        });
       });
   }
 
@@ -80,7 +162,6 @@ class ReviewsScreen extends React.Component {
                 borderRadius: 30,
                 backgroundColor: '#fff',
               }}>
-              {/* <ReviewsModal closeModal={() => this.toggleModal()} /> */}
               <TouchableOpacity
                 style={{position: 'absolute', top: 40, right: 32}}
                 onPress={() => this.toggleModal()}>
@@ -103,7 +184,9 @@ class ReviewsScreen extends React.Component {
 
                 <TouchableOpacity
                   style={styles.add}
-                  onPress={() => this.addReview()}>
+                  onPress={() =>
+                    this.checkReviews(this.props.route.params.name)
+                  }>
                   <Text style={{color: colours.white, fontWeight: '600'}}>
                     Add
                   </Text>
@@ -112,10 +195,13 @@ class ReviewsScreen extends React.Component {
             </View>
           </View>
         </Modal>
-        <View>
-          <TouchableOpacity onPress={() => this.toggleModal()}>
-            <Text> click me </Text>
-          </TouchableOpacity>
+        <View style={styles.mainContainer}>
+          {this.state.reviews && (
+            <FlatList
+              data={this.state.reviews}
+              renderItem={({item}) => <ReviewsModal product={item} />}
+            />
+          )}
         </View>
       </View>
     );
@@ -127,7 +213,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2c3e50',
+    backgroundColor: colours.white,
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colours.white,
   },
   title: {
     fontSize: 23,
@@ -135,7 +225,6 @@ const styles = StyleSheet.create({
     color: colours.tertiary,
     alignSelf: 'center',
     marginTop: 20,
-    // marginBottom: 10,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,

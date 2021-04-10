@@ -10,18 +10,18 @@ import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 
 const EditPreferencesScreen = ({navigation, route}) => {
-    const {user, logout} = useContext(AuthContext);
+  const {user, logout} = useContext(AuthContext);
   const {register} = useContext(AuthContext);
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const [selectedAge, setSelectedAge] = useState('18-24 years');
   const [selectedType, setSelectedType] = useState('Dry');
-  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState("Vegan");
+  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState('Vegan');
   const [types, setTypes] = useState([
     {ageRange: '', allergy: true, category: '', email: '', skinType: ''},
   ]);
   const details = route.params;
-  
+
   useEffect(() => {
     firestore()
       .collection('preferences')
@@ -46,22 +46,18 @@ const EditPreferencesScreen = ({navigation, route}) => {
       .collection('preferences')
       .add({
         email: details[0].email,
+        name: details[0].name,
         ageRange: selectedAge,
         allergy: isSwitchOn,
         skinType: selectedType,
-        category: selectedFilterIndex
+        category: selectedFilterIndex,
       })
       .then(() => {
-        Alert.alert(
-          'You have successfully registered!',
-        );
-        register(details[0].name, details[0].email, details[0].password)
+        Alert.alert('You have successfully registered!');
+        register(details[0].name, details[0].email, details[0].password);
       })
       .catch((error) => {
-        console.log(
-          'Something went wrong with this.',
-          error,
-        );
+        console.log('Something went wrong with this.', error);
       });
   };
 
@@ -73,9 +69,7 @@ const EditPreferencesScreen = ({navigation, route}) => {
         <Picker
           itemStyle={{height: 130}}
           selectedValue={types[0].ageRange}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedAge(itemValue)
-          }>
+          onValueChange={(itemValue, itemIndex) => setSelectedAge(itemValue)}>
           <Picker.Item
             label="Under 18 years"
             color={colours.tertiary}
@@ -211,7 +205,6 @@ const EditPreferencesScreen = ({navigation, route}) => {
         style={styles.mainButton}
         // onPress={() => register(details[0].name, details[0].email, details[0].password)}
         onPress={() => continueRegister()}
-
       />
     </View>
   );
