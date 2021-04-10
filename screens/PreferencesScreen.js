@@ -15,9 +15,9 @@ const PreferencesScreen = ({navigation, route}) => {
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const [selectedAge, setSelectedAge] = useState('18-24 years');
   const [selectedType, setSelectedType] = useState('Dry');
-  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState("Vegan");
+  const [selectedFilterIndex, setSelectedFilterIndex] = React.useState('Vegan');
   const details = route.params;
-  
+
   const continueRegister = () => {
     firestore()
       .collection('preferences')
@@ -26,19 +26,14 @@ const PreferencesScreen = ({navigation, route}) => {
         ageRange: selectedAge,
         allergy: isSwitchOn,
         skinType: selectedType,
-        category: selectedFilterIndex
+        category: selectedFilterIndex,
       })
       .then(() => {
-        Alert.alert(
-          'You have successfully registered!',
-        );
-        register(details[0].name, details[0].email, details[0].password)
+        Alert.alert('You have successfully registered!');
+        register(details[0].name, details[0].email, details[0].password);
       })
       .catch((error) => {
-        console.log(
-          'Something went wrong with this.',
-          error,
-        );
+        console.log('Something went wrong with this.', error);
       });
   };
 
@@ -50,9 +45,7 @@ const PreferencesScreen = ({navigation, route}) => {
         <Picker
           itemStyle={{height: 130}}
           selectedValue={selectedAge}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedAge(itemValue)
-          }>
+          onValueChange={(itemValue, itemIndex) => setSelectedAge(itemValue)}>
           <Picker.Item
             label="Under 18 years"
             color={colours.tertiary}
@@ -188,7 +181,6 @@ const PreferencesScreen = ({navigation, route}) => {
         style={styles.mainButton}
         // onPress={() => register(details[0].name, details[0].email, details[0].password)}
         onPress={() => continueRegister()}
-
       />
     </View>
   );
@@ -205,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: colours.secondary,
   },
   card: {
-    height: 620,
+    height: 630,
     width: 350,
     backgroundColor: colours.white,
     borderRadius: 20,
@@ -218,8 +210,8 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: 'bold',
     fontSize: 40,
-    marginBottom: 30,
-    color: colours.tertiary,
+    marginBottom: 10,
+    color: colours.dark,
   },
   toggle: {
     transform: [{scaleX: 1.3}, {scaleY: 1.3}],
@@ -247,8 +239,8 @@ const styles = StyleSheet.create({
     color: colours.tertiary,
   },
   mainButton: {
-    marginTop: 35,
-    backgroundColor: colours.primary,
+    marginTop: 25,
+    backgroundColor: colours.dark,
     padding: 15,
     width: 300,
     borderRadius: 10,

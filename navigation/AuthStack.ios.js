@@ -9,6 +9,7 @@ import PreferencesScreen from '../screens/PreferencesScreen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import AsyncStorage from '@react-native-community/async-storage';
+import colours from '../constants/colours';
 
 const Stack = createStackNavigator();
 
@@ -19,17 +20,16 @@ const AuthStack = () => {
   useEffect(() => {
     AsyncStorage.getItem('alreadyLaunched').then((value) => {
       if (value == null) {
-        AsyncStorage.setItem('alreadyLaunched', 'true'); 
+        AsyncStorage.setItem('alreadyLaunched', 'true');
         setIsFirstLaunch(true);
       } else {
         setIsFirstLaunch(true);
       }
     });
-  
   }, []);
 
   if (isFirstLaunch === null) {
-    return null; 
+    return null;
   } else if (isFirstLaunch == true) {
     routeName = 'Onboarding';
   } else {
@@ -54,16 +54,16 @@ const AuthStack = () => {
         options={({navigation}) => ({
           title: '',
           headerStyle: {
-            backgroundColor: '#f9fafd',
-            shadowColor: '#f9fafd',
+            backgroundColor: colours.white,
+            shadowColor: colours.white,
             elevation: 0,
           },
           headerLeft: () => (
             <View style={{marginLeft: 10}}>
-              <FontAwesome.Button 
+              <FontAwesome.Button
                 name="long-arrow-left"
                 size={25}
-                backgroundColor="#f9fafd"
+                backgroundColor={colours.white}
                 color="#333"
                 onPress={() => navigation.navigate('Login')}
               />
@@ -81,4 +81,3 @@ const AuthStack = () => {
 };
 
 export default AuthStack;
-

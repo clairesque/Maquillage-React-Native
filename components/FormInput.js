@@ -3,12 +3,14 @@ import {View, TextInput, StyleSheet} from 'react-native';
 import {windowHeight, windowWidth} from '../utils/Dimensions';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Icon} from 'react-native-eva-icons';
+import colours from '../constants/colours';
 
 const FormInput = ({labelValue, placeholderText, iconType, ...rest}) => {
   return (
     <View style={styles.inputContainer}>
       <View style={styles.iconStyle}>
-        <AntDesign name={iconType} size={25} color="#666" />
+        <Icon name={iconType} width={24} height={24} fill={colours.dark} />
       </View>
       <TextInput
         value={labelValue}
@@ -30,7 +32,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
     height: windowHeight / 15,
-    borderColor: '#ccc',
+    borderColor: colours.dark,
     borderRadius: 3,
     borderWidth: 1,
     flexDirection: 'row',
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: colours.dark,
     justifyContent: 'center',
     alignItems: 'center',
   },
