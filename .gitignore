@@ -62,3 +62,4 @@ buck-out/
 /android/app/google-services.json
 GoogleService-Info.plist
 .env
+/src/firebase
