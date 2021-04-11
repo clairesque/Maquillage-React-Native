@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    height: 900,
+    height: 840,
     backgroundColor: colours.secondary,
   },
   card: {
@@ -209,8 +209,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 40,
-    marginBottom: 10,
+    fontSize: 35,
     color: colours.dark,
   },
   toggle: {
@@ -239,9 +238,9 @@ const styles = StyleSheet.create({
     color: colours.tertiary,
   },
   mainButton: {
-    marginTop: 25,
+    marginTop: 10,
     backgroundColor: colours.dark,
-    padding: 15,
+    padding: 13,
     width: 300,
     borderRadius: 10,
     alignItems: 'center',

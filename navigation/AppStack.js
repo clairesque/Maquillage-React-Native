@@ -10,7 +10,6 @@ import HomeScreen from '../screens/HomeScreen';
 import LikesScreen from '../screens/LikesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RecommendationsScreen from '../screens/RecommendationsScreen';
-import EditProfileScreen from '../screens/EditProfileScreen';
 import EditPreferencesScreen from '../screens/EditPreferencesScreen';
 import ProductScreen from '../screens/ProductScreen';
 import ReviewsScreen from '../screens/ReviewsScreen';
@@ -27,8 +26,9 @@ const FeedStack = ({navigation}) => (
       options={{
         headerTitleAlign: 'center',
         headerTitleStyle: {
-          color: '#162F54',
-          fontSize: 18,
+          color: colours.primary,
+          fontWeight: 'bold',
+          fontSize: 23,
         },
         headerStyle: {
           shadowColor: '#fff',
@@ -166,21 +166,7 @@ const ProfileStack = ({navigation}) => (
         title: 'My Profile',
         headerTitleAlign: 'center',
         headerStyle: {
-          backgroundColor: colours.secondary,
-        },
-      }}
-    />
-    <Stack.Screen
-      name="EditProfile"
-      component={EditProfileScreen}
-      options={{
-        headerTitle: 'Edit Profile',
-        headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
-          elevation: 0,
+          backgroundColor: colours.white,
         },
       }}
     />

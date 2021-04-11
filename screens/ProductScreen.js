@@ -21,16 +21,19 @@ const ProductScreen = ({navigation, route}) => {
   function splitDescription(desc) {
     item.modal = true;
     item.user = user;
-    if (desc.length <= 250) {
+    if (desc.length <= 200) {
       filteredDescription = desc.repeat(2);
     } else {
+      if (desc.length > 500) {
+        filteredDescription = desc.slice(400, desc.length - 1);
+      }
       if (desc.includes(',') && !desc.includes('.')) {
         const parts = desc.split(',');
-        const firstThree = parts.slice(0, 3);
+        const firstThree = parts.slice(0, 2);
         filteredDescription = firstThree.join(',');
       } else if (desc.includes(',')) {
         const parts = desc.split('.');
-        const firstThree = parts.slice(0, 5);
+        const firstThree = parts.slice(0, 3);
         filteredDescription = firstThree.join(',');
       } else {
         description = desc.split('.');
@@ -39,6 +42,9 @@ const ProductScreen = ({navigation, route}) => {
           .join('.')
           .replace(/([^.])$/, '$1.');
       }
+    }
+    if (filteredDescription == '') {
+      filteredDescription = 'No description available for this product.';
     }
     return filteredDescription;
   }
@@ -62,9 +68,9 @@ const ProductScreen = ({navigation, route}) => {
         }}>
         <Image
           source={{uri: item.image_link}}
-          defaultSource={{
-            uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-          }}
+          // defaultSource={{
+          //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+          // }}
           style={{
             width: '45%',
             height: '90%',
@@ -79,8 +85,9 @@ const ProductScreen = ({navigation, route}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            bottom: 20,
           }}>
-          <View style={{marginHorizontal: 3}}>
+          <View style={{flex: 1, alignItems: 'flex-start'}}>
             <Text
               style={{
                 fontSize: 25,
@@ -88,7 +95,9 @@ const ProductScreen = ({navigation, route}) => {
                 color: colours.tertiary,
                 textTransform: 'capitalize',
               }}>
-              {splitProduct(item.name, item.brand)}
+              {item.name && item.brand
+                ? splitProduct(item.name, item.brand)
+                : item.name}
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Text
@@ -131,8 +140,8 @@ const ProductScreen = ({navigation, route}) => {
         <View
           style={{
             position: 'absolute',
-            top: 340,
-            left: 20,
+            top: 290,
+            left: 14,
           }}>
           {toggleText(item.product_colors, 'Colours:')}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -165,7 +174,7 @@ const ProductScreen = ({navigation, route}) => {
                     style={{
                       fontSize: 11,
                       fontWeight: 'bold',
-                      color: colours.tertiary,
+                      color: colours.white,
                     }}>
                     {filter}
                   </Text>
@@ -200,7 +209,7 @@ const style = StyleSheet.create({
     borderTopLeftRadius: 40,
   },
   iconContainer: {
-    backgroundColor: colours.primary,
+    backgroundColor: colours.white,
     height: 50,
     width: 50,
     justifyContent: 'center',
@@ -210,19 +219,19 @@ const style = StyleSheet.create({
   detailsText: {
     lineHeight: 20,
     fontSize: 15,
-    marginTop: 45,
+    right: 5,
     color: colours.tertiary,
-    width: 370,
+    width: 345,
   },
   tags: {
-    marginTop: 20,
+    marginTop: 10,
     lineHeight: 22,
     fontSize: 15,
     fontWeight: 'bold',
     color: colours.tertiary,
   },
   filterBtn: {
-    marginTop: 10,
+    marginTop: 5,
     height: 30,
     width: 90,
     marginRight: 9,
@@ -232,7 +241,7 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
   colourBtn: {
-    marginTop: 10,
+    marginTop: 5,
     height: 30,
     width: 30,
     marginRight: 5,

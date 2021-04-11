@@ -16,9 +16,9 @@ export default class ReviewsModal extends React.Component {
           <View style={styles.container}>
             <Image
               source={{uri: product.image_link}}
-              defaultSource={{
-                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              }}
+              // defaultSource={{
+              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              // }}
               style={styles.productImage}
             />
           </View>
@@ -28,6 +28,7 @@ export default class ReviewsModal extends React.Component {
               bottom: 30,
               fontWeight: 'bold',
               fontSize: 21,
+              color: colours.dark,
             }}>
             {product.name}
           </Text>
@@ -37,8 +38,8 @@ export default class ReviewsModal extends React.Component {
             textAlign: 'center',
             bottom: 30,
             fontSize: 16,
-            fontWeight: 'bold',
             fontStyle: 'italic',
+            color: colours.dark,
           }}>
           {product.brand}
         </Text>
@@ -47,7 +48,7 @@ export default class ReviewsModal extends React.Component {
             textAlign: 'right',
             right: 30,
             bottom: 30,
-            color: '#AAA7A7',
+            color: colours.primary,
             fontWeight: 'bold',
           }}>
           ({product.review && product.review.length}{' '}
@@ -57,30 +58,30 @@ export default class ReviewsModal extends React.Component {
           product.review.map((reviews) => (
             <View flexDirection="row" style={{paddingBottom: 5}}>
               <Image
-                defaultSource={{
-                  uri: '/Users/apple/Developer/maquillage/assets/user_icon.png',
-                }}
-                // source={{uri: product.image_link}}
+                // defaultSource={{
+                //   uri: '/Users/apple/Developer/maquillage/assets/dog.jpeg',
+                // }}
+                source={{uri: product.image_link}}
                 style={styles.profile}
               />
               <View>
                 <View>
                   <Text
                     style={{
-                      left: 50,
+                      left: 40,
                       bottom: 15,
                       fontSize: 16,
                       fontWeight: 'bold',
-                      color: colours.tertiary,
+                      color: colours.dark,
                     }}>
                     {reviews.name}
                   </Text>
                   <Text
                     style={{
-                      left: 50,
+                      left: 40,
                       bottom: 15,
                       fontSize: 15,
-                      maxWidth: 300,
+                      maxWidth: 190,
                     }}>
                     {reviews.review}
                   </Text>
@@ -121,6 +122,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 40,
     bottom: 20,
-    left: 30,
+    left: 20,
   },
 });

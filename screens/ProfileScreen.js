@@ -11,7 +11,7 @@ import {
 import {AuthContext} from '../navigation/AuthProvider';
 import colours from '../constants/colours';
 import firestore from '@react-native-firebase/firestore';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Icon} from 'react-native-eva-icons';
 
 const ProfileScreen = ({navigation, route}) => {
   const {user, logout} = useContext(AuthContext);
@@ -50,63 +50,113 @@ const ProfileScreen = ({navigation, route}) => {
           source={{
             uri: userData
               ? userData.userImg ||
-                '/Users/apple/Developer/maquillage/assets/user_icon.png'
-              : '/Users/apple/Developer/maquillage/assets/user_icon.png',
+                'https://i.pinimg.com/564x/04/d2/a8/04d2a8473962fb2bcfe82e068cb8b9ba.jpg'
+              : 'https://i.pinimg.com/564x/04/d2/a8/04d2a8473962fb2bcfe82e068cb8b9ba.jpg',
           }}
         />
         <Text style={styles.userName}>
           {userData ? userData.name.toUpperCase() || '' : ''}
         </Text>
-        <View style={styles.default}>
+        <View flexDirection="row" style={styles.defaultEmaill}>
           <Text>
-            <Icon name="email" size={20} />
+            <Icon
+              style={{marginLeft: 2, bottom: 3}}
+              name="email"
+              height={22}
+              width={22}
+            />
             {'   '}
             <Text style={styles.defaultText}>Email</Text>
           </Text>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            right: 100,
+            alignItems: 'flex-start',
+          }}>
           <Text style={styles.defaultEmail}>
-            {userData ? userData.email || 'test@gmail.com' : 'test@gmail.com'}
+            {userData ? userData.email || '' : ''}
           </Text>
         </View>
         <View style={styles.default}>
           <Text>
-            <Icon name="phone" size={21} color={colours.primary} />
+            <Icon
+              name="phone-outline"
+              height={22}
+              width={22}
+              color={colours.primary}
+            />
             {'   '}
             <Text style={styles.defaultText}>Phone</Text>
           </Text>
-          <Text style={styles.defaultEmail}>
+          <Text style={styles.defaultPhone}>
             {userData
               ? userData.phone || 'No phone number added'
               : 'No phone number added'}
           </Text>
         </View>
-        <View
+        <View style={styles.default}>
+          <Text>
+            <Icon name="clock" height={22} width={22} color={colours.primary} />
+            {'   '}
+            <Text style={styles.defaultText}>Age Range</Text>
+          </Text>
+          <Text style={styles.defaultAge}>
+            {userData
+              ? userData.phone || '18 to 24 years old approx'
+              : '18-24 years old'}
+          </Text>
+        </View>
+        {/* <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginRight: 228,
             marginTop: 20,
           }}>
-          <Icon name="account" size={26} />
-          <Text style={styles.defaultAgeRange}> Age Range </Text>
+          <Text>
+            <Icon style={{marginTop: 1}} name="clock" height={22} width={22} />{' '}
+            <Text style={styles.defaultAgeRange}> Age </Text>
+          </Text>
         </View>
         <Text style={styles.defaultAge}>
           {userData ? userData.phone || '18-24 years old' : '18-24 years old'}
-        </Text>
+        </Text> */}
         <TouchableOpacity
-          style={styles.logout}
+          style={{top: 20, ...styles.prefs}}
           onPress={() => navigation.navigate('EditPreferences')}>
-          <View style={{marginLeft: 26, flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', marginRight: 190}}>
             <Icon
-              name="heart"
-              size={23}
-              style={{color: colours.primary, marginTop: 4}}
+              name="heart-outline"
+              height={22}
+              width={22}
+              style={{color: colours.primary, marginTop: 4, right: 2}}
             />
-            <Text style={styles.defaultAgeRange}> Preferences </Text>
+            <Text style={styles.prefs}> Preferences </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{left: 80, bottom: 23, ...styles.recs}}
+          onPress={() => navigation.navigate('Recommendations')}>
+          <View style={{flexDirection: 'row'}}>
+            <Icon
+              name="bulb"
+              height={22}
+              width={22}
+              style={{color: colours.primary, marginTop: 4, right: 4}}
+            />
+            <Text style={{fontSize: 24, width: 300}}> Recommendations </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.logout} onPress={() => logout()}>
           <Text>
-            <Icon name="logout" size={23} />{' '}
+            <Icon
+              style={{right: 5, bottom: 2}}
+              name="log-out-outline"
+              height={22}
+              width={22}
+            />{' '}
             <Text style={styles.defaultText}>Logout</Text>
           </Text>
         </TouchableOpacity>
@@ -122,8 +172,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   userImg: {
-    height: 220,
-    width: 220,
+    height: 200,
+    width: 200,
     borderRadius: 120,
   },
   userName: {
@@ -131,7 +181,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginTop: 20,
     marginBottom: 10,
-    color: colours.tertiary,
+    color: colours.primary,
   },
   aboutUser: {
     fontSize: 12,
@@ -141,12 +191,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   default: {
-    marginRight: 210,
-    marginTop: 20,
+    marginRight: 180,
+    marginTop: 10,
+  },
+  defaultEmaill: {
+    marginRight: 265,
+  },
+  prefs: {
+    fontSize: 24,
+    marginBottom: 30,
   },
   logout: {
-    marginTop: 20,
-    marginRight: 270,
+    marginRight: 245,
+    bottom: 7,
+  },
+  recs: {
+    marginRight: 190,
   },
   defaultText: {
     fontSize: 24,
@@ -155,16 +215,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     flexDirection: 'row',
     alignSelf: 'flex-start',
+    right: 25,
   },
   defaultAge: {
     fontSize: 15,
-    width: 200,
-    marginLeft: 15,
     color: '#738198',
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
   },
   defaultEmail: {
+    fontSize: 15,
+    color: '#738198',
+    marginRight: 20,
+  },
+  defaultPhone: {
     fontSize: 15,
     color: '#738198',
   },

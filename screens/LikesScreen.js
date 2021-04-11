@@ -11,7 +11,8 @@ import styles from '../styles/LikesStyles';
 import colours from '../constants/colours';
 import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../navigation/AuthProvider';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Icon} from 'react-native-eva-icons';
+import {ScrollView} from 'react-native';
 
 function LikesScreen({navigation}) {
   const [entities, setEntities] = useState([]);
@@ -26,69 +27,141 @@ function LikesScreen({navigation}) {
       })
       .then(() => {});
   };
+  function splitProduct(name, brand) {
+    if (name.toLowerCase().includes(brand.toLowerCase())) {
+      filteredName = name.toLowerCase().replace(brand + ' ', '');
+      return filteredName;
+    } else {
+      return name;
+    }
+  }
+
   const Card = ({product}) => {
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate('ProductScreen', product)}>
-        <View style={styles.card}>
-          <View
-            style={{
-              height: 80,
-              alignItems: 'center',
-            }}>
+      <View style={styles.card}>
+        <TouchableOpacity
+          underlayColor={colours.white}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('ProductScreen', product)}>
+          <View style={{alignItems: 'center'}}>
             <Image
               source={{uri: product.image_link}}
-              defaultSource={{
-                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              }}
-              style={{width: 130, height: 105}}
+              style={{height: 100, width: 100, borderRadius: 50, top: 10}}
+              // defaultSource={{
+              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              // }}
             />
           </View>
-
-          <Text style={{fontWeight: 'bold', fontSize: 15, marginTop: 45}}>
-            {product.name}
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: 5,
-            }}>
-            <Text style={{fontSize: 16}}>{product.brand}</Text>
-            <View
+          <View style={{marginHorizontal: 20, marginTop: 20}}>
+            <Text
               style={{
-                height: 28,
-                width: 28,
-                borderColor: colours.primary,
-                borderWidth: 1,
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
+                fontSize: 15,
+                fontWeight: 'bold',
+                textTransform: 'capitalize',
               }}>
-              {
-                (!product.liked=='liked' ? (
-                  <Icon
-                    name="favorite-border"
-                    color={colours.white}
-                    size={18}
-                    onPress={() => unlikeProduct(product.id)}
-                  />
-                ) : (
-                  <Icon
-                    name="favorite"
-                    color={colours.primary}
-                    size={18}
-                    onPress={() => unlikeProduct(product.id)}
-                  />
-                ))
-              }
-            </View>
+              {product.name && product.brand
+                ? splitProduct(product.name, product.brand)
+                : product.name}
+            </Text>
+            <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
+              {product.brand}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            marginTop: 10,
+            marginHorizontal: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            ${product.price}
+          </Text>
+          <View style={styles.addToCartBtn}>
+            {product.status == 'liked' ? (
+              <Icon
+                name="heart"
+                height={25}
+                width={25}
+                fill={colours.tertiary}
+                onPress={() => unlikeProduct(product.id)}
+              />
+            ) : (
+              <Icon
+                name="heart-outline"
+                height={25}
+                width={25}
+                fill={colours.tertiary}
+                onPress={() => unlikeProduct(product.id)}
+              />
+            )}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   };
+  // const Card = ({product}) => {
+  //   return (
+  //     <TouchableOpacity
+  //       underlayColor={colours.white}
+  //       activeOpacity={0.8}
+  //       onPress={() => navigation.navigate('ProductScreen', product)}>
+  //       <View style={styles.card}>
+  //         <View
+  //           style={{
+  //             height: 80,
+  //             alignItems: 'center',
+  //           }}>
+  //           <Image
+  //             source={{uri: product.image_link}}
+  //             defaultSource={{
+  //               uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+  //             }}
+  //             style={{height: 100, width: 100, borderRadius: 50, top: 10}}
+  //           />
+  //         </View>
+  //         <View style={{marginHorizontal: 15, marginTop: 40}}>
+  //           <Text
+  //             style={{
+  //               fontSize: 15,
+  //               fontWeight: 'bold',
+  //               textTransform: 'capitalize',
+  //             }}>
+  //             {product.name}
+  //           </Text>
+  //         </View>
+  //         <View
+  //           style={{
+  //             flexDirection: 'row',
+  //             justifyContent: 'space-between',
+  //             marginTop: 5,
+  //           }}>
+  //           <Text style={{fontSize: 14, color: colours.dark, marginTop: 2}}>
+  //             {product.brand}
+  //           </Text>
+  //           {product.status == 'liked' ? (
+  //             <Icon
+  //               name="heart"
+  //               height={25}
+  //               width={25}
+  //               fill={colours.tertiary}
+  //               onPress={() => unlikeProduct(product.id)}
+  //             />
+  //           ) : (
+  //             <Icon
+  //               name="heart-outline"
+  //               height={22}
+  //               width={22}
+  //               fill={colours.tertiary}
+  //               onPress={() => unlikeProduct(product.id)}
+  //             />
+  //           )}
+  //         </View>
+  //       </View>
+  //     </TouchableOpacity>
+  //   );
+  // };
 
   useEffect(() => {
     firestore()
@@ -111,34 +184,34 @@ function LikesScreen({navigation}) {
   }, []);
 
   return (
-    <SafeAreaView
+    <ScrollView
       style={{
         flex: 1,
-        paddingHorizontal: 20,
-        backgroundColor: colours.secondary,
+        backgroundColor: colours.white,
       }}>
       <View style={styles.header}>
         <Text
           style={{
-            fontSize: 25,
+            fontSize: 30,
             fontWeight: 'bold',
-            color: colours.tertiary,
+            color: colours.primary,
             marginStart: 11,
           }}>
           Likes
         </Text>
-        <TouchableOpacity onPress={()=> navigation.navigate('Recommendations')}>
-        <View flexDirection="row" style={{marginLeft: 100, marginTop:5}}>
-          <Text style={styles.recText}> Recommendations</Text>
-          <Icon name="chevron-right" size={25}/>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Recommendations')}>
+          <View flexDirection="row" style={{marginLeft: 100, marginTop: 10}}>
+            <Text style={styles.recText}> Recommendations</Text>
+            <Icon name="chevron-right" height={25} width={25} />
           </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
       </View>
       {entities && (
         <View style={styles.listContainer}>
           <FlatList
-            columnWrapperStyle={{justifyContent: 'space-between'}}
             data={entities}
+            style={{marginTop: 15, marginLeft: 6}}
             numColumns={2}
             renderItem={({item}) => <Card product={item} />}
             //keyExtractor={(item) => item.id}
@@ -146,7 +219,7 @@ function LikesScreen({navigation}) {
         </View>
       )}
       {/* </SafeAreaView> </View> */}
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 export default LikesScreen;

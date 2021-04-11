@@ -179,6 +179,7 @@ class ReviewsScreen extends React.Component {
                     autoCapitalize="none"
                     labelValue={this.state.review}
                     placeholder="Your review..."
+                    placeholderTextColor={colours.grey}
                   />
                 </View>
 

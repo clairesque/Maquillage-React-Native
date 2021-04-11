@@ -13,7 +13,7 @@ import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {SearchBar} from 'react-native-elements';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Icon} from 'react-native-eva-icons';
 import colours from '../constants/colours';
 import {filtersAll} from '../constants/filters';
 import products from '../constants/products';
@@ -30,6 +30,7 @@ const HomeScreen = ({navigation}) => {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
+  const [likes, setLikes] = useState([]);
 
   function splitProduct(name, brand) {
     if (name.toLowerCase().includes(brand.toLowerCase())) {
@@ -40,6 +41,13 @@ const HomeScreen = ({navigation}) => {
     }
   }
 
+  function checkLike(name) {
+    const found = likes.some((el) => el.name === name);
+    const status = likes.some((el) => el.status === 'liked');
+    if (found && status) return true;
+    if (!found || !status) return false;
+  }
+
   const Card = ({product}) => {
     return (
       <View style={styles.card}>
@@ -47,19 +55,19 @@ const HomeScreen = ({navigation}) => {
           underlayColor={colours.white}
           activeOpacity={0.9}
           onPress={() => navigation.navigate('ProductScreen', product)}>
-          <View style={{alignItems: 'center', top: -40}}>
+          <View style={{alignItems: 'center'}}>
             <Image
               source={{uri: product.image_link}}
-              style={{height: 120, width: 120}}
-              defaultSource={{
-                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              }}
+              style={{height: 100, width: 100, borderRadius: 50, top: 10}}
+              // defaultSource={{
+              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              // }}
             />
           </View>
-          <View style={{marginHorizontal: 20}}>
+          <View style={{marginHorizontal: 20, marginTop: 22}}>
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 15,
                 fontWeight: 'bold',
                 textTransform: 'capitalize',
               }}>
@@ -83,12 +91,23 @@ const HomeScreen = ({navigation}) => {
             ${product.price}
           </Text>
           <View style={styles.addToCartBtn}>
-            <Icon
-              name="favorite"
-              size={15}
-              color={colours.white}
-              onPress={() => likeProduct(product)}
-            />
+            {checkLike(product.name) ? (
+              <Icon
+                name="heart"
+                height={25}
+                width={25}
+                fill={colours.tertiary}
+                onPress={() => likeProduct(product)}
+              />
+            ) : (
+              <Icon
+                name="heart-outline"
+                height={25}
+                width={25}
+                fill={colours.tertiary}
+                onPress={() => likeProduct(product)}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -102,6 +121,7 @@ const HomeScreen = ({navigation}) => {
         userId: user.uid,
         brand: item.brand,
         name: item.name,
+        price: item.price,
         tag_list: item.tag_list,
         product_colors: item.product_colors,
         description: item.description,
@@ -109,7 +129,6 @@ const HomeScreen = ({navigation}) => {
         status: 'liked',
       })
       .then(() => {
-        Alert.alert('You have liked this product.');
         setLike(null);
       })
       .catch((error) => {
@@ -118,23 +137,41 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setFilteredDataSource(responseJson);
-        setMasterDataSource(responseJson);
-        if (loading) {
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // fetch('http://makeup-api.herokuapp.com/api/v1/products.json')
+    //   .then((response) => response.json())
+    //   .then((responseJson) => {
+    //     setFilteredDataSource(responseJson);
+    //     setMasterDataSource(responseJson);
+    //     if (loading) {
+    //       setLoading(false);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    setFilteredDataSource(products);
+    firestore()
+      .collection('likes')
+      .where('status', '==', 'liked')
+      .onSnapshot(
+        (querySnapshot) => {
+          const allLikes = [];
+          querySnapshot.forEach((doc) => {
+            const like = doc.data();
+            like.id = doc.id;
+            allLikes.push(like);
+          });
+          setLikes(allLikes);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   }, []);
 
   const searchFilterFunction = (text) => {
     if (text) {
-      const newData = masterDataSource.filter(function (item) {
+      const newData = products.filter(function (item) {
         const searchName = item.name
           ? item.name.toLowerCase()
           : ''.toLowerCase();
@@ -147,14 +184,14 @@ const HomeScreen = ({navigation}) => {
       setFilteredDataSource(newData);
       setSearch(text);
     } else {
-      setFilteredDataSource(masterDataSource);
+      setFilteredDataSource(products);
       setSearch(text);
     }
   };
 
   const filterFunction = (text, index) => {
     setSelectedFilterIndex(index);
-    const newData = masterDataSource.filter(function (item) {
+    const newData = products.filter(function (item) {
       const tags = item.tag_list.toString();
       const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
       const textData = text.toLowerCase();
@@ -177,9 +214,7 @@ const HomeScreen = ({navigation}) => {
             <View
               style={{
                 backgroundColor:
-                  selectedFilterIndex == index
-                    ? colours.secondary
-                    : colours.grey,
+                  selectedFilterIndex == index ? colours.dark : colours.grey,
                 ...styles.filterBtn,
               }}>
               <Text
@@ -235,7 +270,8 @@ const HomeScreen = ({navigation}) => {
           <ListFilters />
         </View>
         <FlatList
-          data={products}
+          style={{marginTop: 30, marginLeft: 6}}
+          data={filteredDataSource}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}
@@ -248,12 +284,14 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    flex: 1,
   },
   itemStyle: {
     padding: 10,
   },
   filterListContainer: {
     paddingVertical: 10,
+    marginTop: 10,
     alignItems: 'center',
     paddingHorizontal: 10,
   },
@@ -268,20 +306,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    height: 220,
     width: cardWidth,
-    marginHorizontal: 10,
-    marginBottom: 20,
-    marginTop: 50,
+    marginHorizontal: 7,
+    marginBottom: 12,
     borderRadius: 15,
     elevation: 13,
+    borderWidth: 1,
     backgroundColor: colours.white,
   },
   addToCartBtn: {
     height: 30,
     width: 30,
+    bottom: 5,
     borderRadius: 10,
-    backgroundColor: colours.secondary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -292,7 +329,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 80,
+    height: 100,
   },
 });
 

@@ -15,7 +15,7 @@ const RecommendationsScreen = ({navigation}) => {
   const SLIDER_1_FIRST_ITEM = 1;
 
   const {user, logout} = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [slider1ActiveSlide, setSlider] = useState(SLIDER_1_FIRST_ITEM);
   const [types, setTypes] = useState([
@@ -53,19 +53,10 @@ const RecommendationsScreen = ({navigation}) => {
       );
   }, []);
 
-  // useEffect(() => {
-
-  // }, []);
-
-  // useEffect(() => {
-  //   getTypes();
-  //   navigation.addListener('focus', () => setLoading(!loading));
-  // }, [navigation, loading]);
-
   getByDescription = (text) => {
     var newData = [];
     if (text) {
-      newData = masterDataSource.filter(function (item) {
+      newData = products.filter(function (item) {
         const searchName = item.description
           ? item.description.toLowerCase()
           : ''.toLowerCase();
@@ -79,7 +70,7 @@ const RecommendationsScreen = ({navigation}) => {
   getByTags = (text) => {
     var newData = [];
     if (text) {
-      newData = masterDataSource.filter(function (item) {
+      newData = products.filter(function (item) {
         const tags = item.tag_list.toString();
         const searchName = tags ? tags.toLowerCase() : ''.toLowerCase();
         const textData = text.toLowerCase();
@@ -101,7 +92,7 @@ const RecommendationsScreen = ({navigation}) => {
       />
     );
   };
-  defaultSlider = (number, skinType, masterDataSource) => {
+  defaultSlider = (number, skinType, products) => {
     return (
       <View style={styles.exampleContainer}>
         {/* <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text> */}
@@ -111,7 +102,7 @@ const RecommendationsScreen = ({navigation}) => {
         </Text>
         <Carousel
           ref={(c) => (this._slider1Ref = c)}
-          data={masterDataSource}
+          data={products}
           renderItem={this._renderItemWithParallax}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -121,30 +112,20 @@ const RecommendationsScreen = ({navigation}) => {
           inactiveSlideOpacity={0.7}
           containerCustomStyle={styles.slider}
           contentContainerCustomStyle={styles.sliderContentContainer}
-          // loop={true}
-          // loopClonesPerSide={2}
-          // autoplay={true}
-          // autoplayDelay={500}
-          // autoplayInterval={3000}
           onSnapToItem={(index) => setSlider({index})}
         />
       </View>
     );
   };
-  layout = (number, productType, masterDataSource) => {
+  layout = (number, productType, products) => {
     return (
       <View style={[styles.exampleContainer, styles.exampleContainerLight]}>
-        {/* <Text
-          style={[
-            styles.title,
-            styles.titleDark,
-          ]}>{`Recommendation ${number}`}</Text> */}
         <Text style={[styles.subtitle]}>
           Few <Text style={{fontWeight: 'bold'}}>{productType}</Text> products
           for you...
         </Text>
         <Carousel
-          data={masterDataSource}
+          data={products}
           renderItem={this._renderItem}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -156,7 +137,7 @@ const RecommendationsScreen = ({navigation}) => {
       </View>
     );
   };
-  allergySlider = (masterDataSource) => {
+  allergySlider = (products) => {
     return (
       <View style={styles.exampleContainer}>
         {/* <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text> */}
@@ -165,7 +146,7 @@ const RecommendationsScreen = ({navigation}) => {
         </Text>
         <Carousel
           ref={(c) => (this._slider1Ref = c)}
-          data={masterDataSource}
+          data={products}
           renderItem={this._renderItemWithParallax}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -175,11 +156,11 @@ const RecommendationsScreen = ({navigation}) => {
           inactiveSlideOpacity={0.7}
           containerCustomStyle={styles.slider}
           contentContainerCustomStyle={styles.sliderContentContainer}
-          // loop={true}
-          // loopClonesPerSide={2}
-          // autoplay={true}
-          // autoplayDelay={500}
-          // autoplayInterval={3000}
+          loop={true}
+          loopClonesPerSide={2}
+          autoplay={true}
+          autoplayDelay={500}
+          autoplayInterval={3000}
           onSnapToItem={(index) => setSlider({index})}
         />
       </View>
@@ -218,11 +199,11 @@ export default RecommendationsScreen;
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colours.secondary,
+    backgroundColor: colours.grey,
   },
   containerActivity: {
-    height: 700,
-    backgroundColor: colours.secondary,
+    flex: 1,
+    backgroundColor: colours.grey,
   },
   activityIndicator: {
     paddingTop: 100,
