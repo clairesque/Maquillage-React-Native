@@ -12,6 +12,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import RecommendationsScreen from '../screens/RecommendationsScreen';
 import EditPreferencesScreen from '../screens/EditPreferencesScreen';
 import ProductScreen from '../screens/ProductScreen';
+import ProductColoursScreen from '../screens/ProductColoursScreen';
 import ReviewsScreen from '../screens/ReviewsScreen';
 import colours from '../constants/colours';
 
@@ -34,17 +35,6 @@ const FeedStack = ({navigation}) => (
           shadowColor: '#fff',
           elevation: 0,
         },
-        // headerRight: () => (
-        //   <View style={{marginRight: 10}}>
-        //     <FontAwesome5.Button
-        //       name="plus"
-        //       size={22}
-        //       backgroundColor="#fff"
-        //       color="#162F54"
-        //       onPress={() => navigation.navigate('Recommendations')}
-        //     />
-        //   </View>
-        // ),
       }}
     />
     <Stack.Screen
@@ -95,6 +85,25 @@ const FeedStack = ({navigation}) => (
     <Stack.Screen
       name="ProductScreen"
       component={ProductScreen}
+      options={{
+        title: '',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+        headerBackTitleVisible: false,
+        headerBackImage: () => (
+          <View style={{marginLeft: 15}}>
+            <Ionicons name="arrow-back" size={25} color="#162F54" />
+          </View>
+        ),
+      }}
+    />
+    <Stack.Screen
+      name="ProductColoursScreen"
+      component={ProductColoursScreen}
       options={{
         title: '',
         headerTitleAlign: 'center',

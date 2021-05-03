@@ -152,8 +152,9 @@ const ProductScreen = ({navigation, route}) => {
                     backgroundColor: colour.hex_value,
                     ...style.colourBtn,
                   }}
-                  onPress={()=>console.log("hi", colour.hex_value)}
-                  ></TouchableOpacity>
+                  onPress={() =>
+                    navigation.navigate('ProductColoursScreen', colour.hex_value)
+                  }></TouchableOpacity>
               ))}
             </View>
           </ScrollView>

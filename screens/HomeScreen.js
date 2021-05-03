@@ -31,14 +31,6 @@ const HomeScreen = ({navigation}) => {
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
   const [likes, setLikes] = useState([]);
 
-  function splitProduct(name, brand) {
-    if (name.toLowerCase().includes(brand.toLowerCase())) {
-      filteredName = name.toLowerCase().replace(brand + ' ', '');
-      return filteredName;
-    } else {
-      return name;
-    }
-  }
 
   function checkLike(name) {
     const found = likes.some((el) => el.name === name);
@@ -54,7 +46,14 @@ const HomeScreen = ({navigation}) => {
       }
   });
   }
-
+  function splitProduct(name, brand) {
+    if (name.toLowerCase().includes(brand.toLowerCase())) {
+      filteredName = name.toLowerCase().replace(brand + ' ', '');
+      return filteredName;
+    } else {
+      return name;
+    }
+  }
   const unlikeProduct = async (id) => {
     firestore()
       .collection('likes')
