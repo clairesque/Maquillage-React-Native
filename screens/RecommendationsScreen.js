@@ -95,7 +95,6 @@ const RecommendationsScreen = ({navigation}) => {
   defaultSlider = (number, skinType, products) => {
     return (
       <View style={styles.exampleContainer}>
-        {/* <Text style={styles.titleDefault}>{`Recommendation ${number}`}</Text> */}
         <Text style={styles.titleDefault}>
           Since you have <Text style={{fontWeight: 'bold'}}>{skinType}</Text>{' '}
           skin...
@@ -171,7 +170,7 @@ const RecommendationsScreen = ({navigation}) => {
   const allergy = types[0].allergy;
 
   var skinRecommender = defaultSlider(1, skinType, getByDescription(skinType));
-  var typeRecommender = layout(2, productType, getByTags(productType));
+  var typeRecommender = defaultSlider(2, productType, getByTags(productType));
   var allergyRecommender = allergySlider(getByTags('hypoallergenic'));
 
   return !loading ? (
@@ -199,11 +198,11 @@ export default RecommendationsScreen;
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colours.grey,
+    backgroundColor: colours.white,
   },
   containerActivity: {
     flex: 1,
-    backgroundColor: colours.grey,
+    backgroundColor: colours.white,
   },
   activityIndicator: {
     paddingTop: 100,

@@ -47,9 +47,9 @@ function LikesScreen({navigation}) {
             <Image
               source={{uri: product.image_link}}
               style={{height: 100, width: 100, borderRadius: 50, top: 10}}
-              // defaultSource={{
-              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              // }}
+              defaultSource={{
+                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              }}
             />
           </View>
           <View style={{marginHorizontal: 20, marginTop: 20}}>
@@ -75,9 +75,16 @@ function LikesScreen({navigation}) {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
+          {product.price==0 ? (
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-            ${product.price}
+          $25.0
           </Text>
+          ):(
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            ${product.price}
+            </Text>
+            )
+          }
           <View style={styles.addToCartBtn}>
             {product.status == 'liked' ? (
               <Icon

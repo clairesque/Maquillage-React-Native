@@ -118,8 +118,6 @@ export const AuthProvider = ({children}) => {
             await auth()
               .createUserWithEmailAndPassword(email, password)
               .then(() => {
-                //Once the user creation has happened successfully, we can add the currentUser into firestore
-                //with the appropriate details.
                 firestore()
                   .collection('users')
                   .doc(auth().currentUser.uid)
@@ -137,7 +135,6 @@ export const AuthProvider = ({children}) => {
                     );
                   });
               })
-              //we need to catch the whole sign up process if it fails too.
               .catch((error) => {
                 console.log('Something went wrong with sign up: ', error);
               });

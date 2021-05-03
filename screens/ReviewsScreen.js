@@ -28,7 +28,24 @@ class ReviewsScreen extends React.Component {
   }
 
   reviewsDb = firestore().collection('reviews');
-
+  getReviews() {
+    this.reviewsDb
+      .get()
+      .then((snapshot) => {
+        const allReviews = [];
+        snapshot.forEach((doc) => {
+          const review = doc.data();
+          review.id = doc.id;
+          allReviews.push(review);
+        }),
+          this.setState({
+            reviews: allReviews,
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   componentDidMount() {
     // toggle modal
     if (this.state.item) {
@@ -42,22 +59,7 @@ class ReviewsScreen extends React.Component {
     }
 
     // get values from collection
-    this.reviewsDb
-      .get()
-      .then((snapshot) => {
-        const allReviews = [];
-        snapshot.forEach((doc) => {
-          const like = doc.data();
-          like.id = doc.id;
-          allReviews.push(like);
-        }),
-          this.setState({
-            reviews: allReviews,
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.getReviews();
 
     // get user's name using their email
     if (this.state.item) {
@@ -68,7 +70,6 @@ class ReviewsScreen extends React.Component {
           var name = '';
           querySnapshot.forEach((doc) => {
             name = doc._data['name'];
-            console.log('this is in get name', name);
           });
           this.setState({
             username: name,
@@ -86,7 +87,6 @@ class ReviewsScreen extends React.Component {
           if (querySnapshot['_docs'].length == 0) {
             this.addReview();
           } else {
-            console.log('Document exists');
             querySnapshot.forEach((doc) => {
               this.updateReview(doc.id);
             });
@@ -100,7 +100,6 @@ class ReviewsScreen extends React.Component {
 
   addReview() {
     username = this.state.username;
-    console.log('this is in add review', this.state.username);
     firestore()
       .collection('reviews')
       .add({
@@ -116,6 +115,10 @@ class ReviewsScreen extends React.Component {
         this.setState({
           isModalVisible: false,
         });
+        this.getReviews();
+        setTimeout(function () {
+          alert(`Your review has been successfully added.`);
+        }, 2000);
       })
       .catch((error) => {
         console.log('Something went wrong with this.');
@@ -134,6 +137,10 @@ class ReviewsScreen extends React.Component {
         this.setState({
           isModalVisible: false,
         });
+        this.getReviews();
+        setTimeout(function () {
+          alert(`Your review has been successfully added.`);
+        }, 100);
       });
   }
 

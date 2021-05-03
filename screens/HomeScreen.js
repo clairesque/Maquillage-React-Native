@@ -28,7 +28,6 @@ const HomeScreen = ({navigation}) => {
   const [like, setLike] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filteredDataSource, setFilteredDataSource] = useState([]);
-  const [masterDataSource, setMasterDataSource] = useState([]);
   const [selectedFilterIndex, setSelectedFilterIndex] = React.useState(0);
   const [likes, setLikes] = useState([]);
 
@@ -48,6 +47,28 @@ const HomeScreen = ({navigation}) => {
     if (!found || !status) return false;
   }
 
+  function getId(name) {
+    likes.find((el, i) => {
+      if (el.name === name) {
+          unlikeProduct(likes[i].id); 
+      }
+  });
+  }
+
+  const unlikeProduct = async (id) => {
+    firestore()
+      .collection('likes')
+      .doc(id)
+      .update({
+        status: 'unliked',
+      })
+      .then(() => {
+      })
+      .catch((error) => {
+        console.log('Something went wrong with this.', error);
+      });
+  };
+
   const Card = ({product}) => {
     return (
       <View style={styles.card}>
@@ -59,9 +80,9 @@ const HomeScreen = ({navigation}) => {
             <Image
               source={{uri: product.image_link}}
               style={{height: 100, width: 100, borderRadius: 50, top: 10}}
-              // defaultSource={{
-              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              // }}
+              defaultSource={{
+                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              }}
             />
           </View>
           <View style={{marginHorizontal: 20, marginTop: 22}}>
@@ -86,10 +107,19 @@ const HomeScreen = ({navigation}) => {
             marginHorizontal: 20,
             flexDirection: 'row',
             justifyContent: 'space-between',
-          }}>
+          }}> 
+          <>
+          {product.price==0 ? (
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-            ${product.price}
+          $25.0
           </Text>
+          ):(
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            ${product.price}
+            </Text>
+            )
+          }
+          </>
           <View style={styles.addToCartBtn}>
             {checkLike(product.name) ? (
               <Icon
@@ -97,7 +127,7 @@ const HomeScreen = ({navigation}) => {
                 height={25}
                 width={25}
                 fill={colours.tertiary}
-                onPress={() => likeProduct(product)}
+                onPress={() => getId(product.name)}
               />
             ) : (
               <Icon
@@ -129,6 +159,7 @@ const HomeScreen = ({navigation}) => {
         status: 'liked',
       })
       .then(() => {
+        alert(`You have liked ${item.name}!`);
         setLike(null);
       })
       .catch((error) => {
@@ -271,7 +302,7 @@ const HomeScreen = ({navigation}) => {
         </View>
         <FlatList
           style={{marginTop: 30, marginLeft: 6}}
-          data={filteredDataSource}
+          data={filteredDataSource.slice(0, 30)}
           numColumns={2}
           initialNumToRender={6}
           renderItem={({item}) => <Card product={item} />}

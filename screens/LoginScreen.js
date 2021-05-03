@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
-import SocialButton from '../components/SocialButton';
 import {AuthContext} from '../navigation/AuthProvider';
 import colours from '../constants/colours';
 

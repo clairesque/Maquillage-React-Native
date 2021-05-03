@@ -16,9 +16,9 @@ export default class ReviewsModal extends React.Component {
           <View style={styles.container}>
             <Image
               source={{uri: product.image_link}}
-              // defaultSource={{
-              //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-              // }}
+              defaultSource={{
+                uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+              }}
               style={styles.productImage}
             />
           </View>
@@ -58,10 +58,13 @@ export default class ReviewsModal extends React.Component {
           product.review.map((reviews) => (
             <View flexDirection="row" style={{paddingBottom: 5}}>
               <Image
-                // defaultSource={{
-                //   uri: '/Users/apple/Developer/maquillage/assets/dog.jpeg',
-                // }}
+                defaultSource={{
+                  uri: '/Users/apple/Developer/maquillage/assets/dog.jpeg',
+                }}
                 source={{uri: product.image_link}}
+                source={{
+                  uri: '/Users/apple/Developer/maquillage/assets/dog.jpeg',
+                }}
                 style={styles.profile}
               />
               <View>

@@ -28,7 +28,6 @@ export default class SliderEntry extends Component {
           even ? styles.imageContainerEven : {},
         ]}
         style={styles.image}
-        //   defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
         parallaxFactor={0.35}
         showSpinner={true}
         spinnerColor={even ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.25)'}
@@ -37,7 +36,7 @@ export default class SliderEntry extends Component {
     ) : (
       <Image
         source={{uri: image_link}}
-        //   defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
+        defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
         style={styles.image}
       />
     );

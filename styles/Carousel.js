@@ -25,9 +25,11 @@ export default StyleSheet.create({
   },
   exampleContainerDark: {
     backgroundColor: colors.black,
+    borderRadius: 1, 
   },
   exampleContainerLight: {
-    backgroundColor: colours.grey,
+    backgroundColor: colours.white,
+
   },
   title: {
     paddingHorizontal: 30,

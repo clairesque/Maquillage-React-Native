@@ -59,7 +59,7 @@ const ProductScreen = ({navigation, route}) => {
   }
 
   return (
-    <SafeAreaView style={{backgroundColor: colours.white, height: 750}}>
+    <ScrollView style={{backgroundColor: colours.white, height: 750}}>
       <View
         style={{
           justifyContent: 'center',
@@ -68,9 +68,9 @@ const ProductScreen = ({navigation, route}) => {
         }}>
         <Image
           source={{uri: item.image_link}}
-          // defaultSource={{
-          //   uri: '/Users/apple/Developer/maquillage/assets/logo.png',
-          // }}
+          defaultSource={{
+            uri: '/Users/apple/Developer/maquillage/assets/logo.png',
+          }}
           style={{
             width: '45%',
             height: '90%',
@@ -137,12 +137,7 @@ const ProductScreen = ({navigation, route}) => {
         <Text style={style.detailsText}>
           {splitDescription(item.description)}
         </Text>
-        <View
-          style={{
-            position: 'absolute',
-            top: 290,
-            left: 14,
-          }}>
+        <View>
           {toggleText(item.product_colors, 'Colours:')}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View
@@ -151,12 +146,14 @@ const ProductScreen = ({navigation, route}) => {
                 ...style.colours,
               }}>
               {item.product_colors.map((colour, index) => (
-                <View
+                <TouchableOpacity
                   key={index}
                   style={{
                     backgroundColor: colour.hex_value,
                     ...style.colourBtn,
-                  }}></View>
+                  }}
+                  onPress={()=>console.log("hi", colour.hex_value)}
+                  ></TouchableOpacity>
               ))}
             </View>
           </ScrollView>
@@ -190,7 +187,7 @@ const ProductScreen = ({navigation, route}) => {
           )}
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

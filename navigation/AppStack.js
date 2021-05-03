@@ -54,7 +54,7 @@ const FeedStack = ({navigation}) => (
         title: 'Recommendations',
         headerTitleAlign: 'center',
         headerStyle: {
-          backgroundColor: '#162F5415',
+          backgroundColor: '#ffffff',
           shadowColor: '#162F5415',
           elevation: 0,
         },
