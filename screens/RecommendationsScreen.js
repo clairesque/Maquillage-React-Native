@@ -80,7 +80,13 @@ const RecommendationsScreen = ({navigation}) => {
     return newData;
   };
   _renderItem = ({item, index}) => {
-    return <SliderEntry data={item} even={(index + 1) % 2 === 0} onPress={() => console.log("hi")} />;
+    return (
+      <SliderEntry
+        data={item}
+        even={(index + 1) % 2 === 0}
+        onPress={() => console.log('hi')}
+      />
+    );
   };
   _renderItemWithParallax = ({item, index}, parallaxProps) => {
     return (
@@ -89,17 +95,24 @@ const RecommendationsScreen = ({navigation}) => {
         even={(index + 1) % 2 === 0}
         parallax={true}
         parallaxProps={parallaxProps}
-        navigation = {navigation}
+        navigation={navigation}
       />
     );
   };
   defaultSlider = (number, skinType, products) => {
     return (
       <View style={styles.exampleContainer}>
-        <Text style={styles.titleDefault}>
-          Since you have <Text style={{fontWeight: 'bold'}}>{skinType}</Text>{' '}
-          skin...
-        </Text>
+        {number==1 ? 
+          <Text style={styles.titleDefault}>
+            Since you have <Text style={{fontWeight: 'bold'}}>{skinType}</Text>{' '}
+            skin...
+          </Text>
+        :
+          <Text style={styles.titleDefault}>
+            Few <Text style={{fontWeight: 'bold'}}>{skinType}</Text> products
+            for you...
+          </Text>
+        }
         <Carousel
           ref={(c) => (this._slider1Ref = c)}
           data={products}
