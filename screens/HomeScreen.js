@@ -22,9 +22,10 @@ import {ActivityIndicator} from 'react-native-paper';
 const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, route}) => {
+
   const {user, logout} = useContext(AuthContext);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(route.params ? route.params : '');
   const [like, setLike] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filteredDataSource, setFilteredDataSource] = useState([]);

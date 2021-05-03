@@ -75,8 +75,15 @@ const ProductColoursScreen = ({navigation, route}) => {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
       <Text style={styles.titleDefault}>
-        <Text>Products with the shade {'\n'} <Text style={{fontWeight: 'bold'}}> {targetColour} </Text> </Text>
+        <Text>Products with the shade {'\n'} <Text style={{fontWeight: 'bold'}}> {targetColour}  </Text>
+         <View
+                  style={{
+                    backgroundColor: targetColour,
+                    ...styles.colourBtn,
+                  }}></View>
+                   </Text>
         </Text>
+       
         <FlatList
           style={{marginTop: 30, marginLeft: 6}}
           data={results}
@@ -140,6 +147,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       height: 100,
     },
+    colourBtn: {
+        marginTop: 5,
+        height: 20,
+        width: 20,
+        marginRight: 5,
+        borderRadius: 60,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+      },
     titleDefault: {
         marginTop: 20,
         backgroundColor: 'transparent',

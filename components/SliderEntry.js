@@ -27,6 +27,7 @@ export default class SliderEntry extends Component {
           styles.imageContainer,
           even ? styles.imageContainerEven : {},
         ]}
+        defaultSource={{uri: '/Users/apple/Developer/maquillage/assets/logo.png'}}
         style={styles.image}
         parallaxFactor={0.35}
         showSpinner={true}
@@ -46,6 +47,7 @@ export default class SliderEntry extends Component {
     const {
       data: {name, brand},
       even,
+      navigation
     } = this.props;
 
     const uppercaseTitle = name ? (
@@ -57,9 +59,8 @@ export default class SliderEntry extends Component {
     ) : (
       false
     );
-
     return (
-      <TouchableOpacity activeOpacity={1} style={styles.slideInnerContainer}>
+      <TouchableOpacity onPress={()=> navigation.navigate('ProductScreen', this.props.data)} activeOpacity={1} style={styles.slideInnerContainer}>
         <View style={styles.shadow} />
         <View
           style={[

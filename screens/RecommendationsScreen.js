@@ -80,7 +80,7 @@ const RecommendationsScreen = ({navigation}) => {
     return newData;
   };
   _renderItem = ({item, index}) => {
-    return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+    return <SliderEntry data={item} even={(index + 1) % 2 === 0} onPress={() => console.log("hi")} />;
   };
   _renderItemWithParallax = ({item, index}, parallaxProps) => {
     return (
@@ -89,6 +89,7 @@ const RecommendationsScreen = ({navigation}) => {
         even={(index + 1) % 2 === 0}
         parallax={true}
         parallaxProps={parallaxProps}
+        navigation = {navigation}
       />
     );
   };
