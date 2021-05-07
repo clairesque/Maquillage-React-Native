@@ -214,6 +214,10 @@ function LikesScreen({navigation}) {
           </View>
         </TouchableOpacity>
       </View>
+      {entities.length==0 && (
+        <Text style={styles.noLikes}> You have no liked products. </Text>
+      )
+}
       {entities && (
         <View style={styles.listContainer}>
           <FlatList

@@ -28,6 +28,13 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 2,
   },
+  noLikes: {
+    fontSize: 28,
+    textAlign: 'center',
+    top: 210,
+    fontWeight: 'bold',
+    color: colours.tertiary
+  },
   addToCartBtn: {
     height: 30,
     width: 30,
