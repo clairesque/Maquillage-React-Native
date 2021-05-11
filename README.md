@@ -8,21 +8,30 @@ Maquillage is a content-based recommendation application that involves integrati
 
 ## Installation
 
-Use the package manager npm to install dependencies.
+Use the package manager [npm](https://www.npmjs.com/get-npm) to install dependencies.
 
-``` npm install i  ```
+``` 
+npm install i  
+```
 
-Navigate to the ios folder and run,
+For iOS, ensure [CocoaPods](https://cocoapods.org/) is installed, and then retrieve all the necessary pods.
 
-``` pod install  ```
+``` 
+cd ios
+pod install 
+```
 
 ## Usage
 
-To run the app on a simulator on IOS and Android respectively,
+To run the app on a simulator on iOS and Android respectively,
 
-``` npm run ios ```
+``` 
+npm run ios 
+```
 
-``` npm run android ```
+``` 
+npm run android 
+```
 
 ## Features
 
